@@ -58,6 +58,7 @@
         "machine/passive/TileFluidGenerator.ts",
         "machine/passive/define.ts",
 
+        "translation.ts",
         "recipe_viewer.ts"
 
     ],
