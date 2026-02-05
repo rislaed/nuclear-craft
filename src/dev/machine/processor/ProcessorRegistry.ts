@@ -20,7 +20,7 @@ class ProcessorRegistry {
         MachineRegistry.registerPrototype(id, new TileProcessor(...io, EParticleType[particle1], EParticleType[particle2], processTime, processPower));
         StorageInterface.createInterface(id, new ProcessorInterface(...io));
         this.registerRecipeHandler(id, new ProcessorRecipeHandler(...io));
-        Item.addCreativeGroup("nc_processor", "Processor Machine", [id]);
+        Item.addCreativeGroup("nc_processor", Translation.translate("Processing Machines"), [id]);
         return id;
     }
 

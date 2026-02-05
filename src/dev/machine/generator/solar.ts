@@ -1,4 +1,4 @@
-Item.addCreativeGroup("nc_solar", "Solar Panel", [
+Item.addCreativeGroup("nc_solar", Translation.translate("Solar Panels"), [
     NCItem.createBlock("solar_basic", "Basic Solar Panel", [1, 0, 1]),
     NCItem.createBlock("solar_adv", "Advanced Solar Panel", [1, 0, 1]),
     NCItem.createBlock("solar_du", "DU Solar Panel", [1, 0, 1]),

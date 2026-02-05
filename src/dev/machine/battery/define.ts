@@ -1,4 +1,4 @@
-Item.addCreativeGroup("nc_battery", "Battery", [
+Item.addCreativeGroup("nc_battery", Translation.translate("Batteries"), [
     NCItem.createBlock("volpile_basic", "Basic Voltaic Pile", [0, 0, 3]),
     NCItem.createBlock("volpile_adv", "Advanced Voltaic Pile", [0, 0, 3]),
     NCItem.createBlock("volpile_du", "DU Voltaic Pile", [0, 0, 3]),

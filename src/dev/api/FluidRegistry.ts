@@ -38,7 +38,9 @@ class FluidRegistry {
             //this.genCellTex(key, UI.TextureSource.get(uiTexture));
         }
         LiquidRegistry.registerLiquid(key, name, [uiTexture]);
-        Item.addCreativeGroup("nc_cell", "NC Cell", [ItemRegistry.registerItem(new ItemFluidCell("cell_" + key, key)).id]);
+        Item.addCreativeGroup("nc_cell", Translation.translate("NC Cell"), [
+            ItemRegistry.registerItem(new ItemFluidCell("cell_" + key, key)).id
+        ]);
     }
 
     static waterBlendColor(soluteColor: string, blendRatio: number = 0.5): number {

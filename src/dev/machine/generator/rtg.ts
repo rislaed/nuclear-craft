@@ -1,4 +1,4 @@
-Item.addCreativeGroup("nc_rtg", "RTG", [
+Item.addCreativeGroup("nc_rtg", Translation.translate("RTGs"), [
     NCItem.createBlock("rtg_uranium", "Uranium RTG", [0, 0, 1]),
     NCItem.createBlock("rtg_plutonium", "Plutonium RTG", [0, 0, 1]),
     NCItem.createBlock("rtg_americium", "Americium RTG", [0, 0, 1]),

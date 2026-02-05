@@ -4,7 +4,7 @@ class FissionMaterial {
         const item = ItemRegistry.registerItem(new this.Instance(key, name));
         Recipes2.addShapeless({id: item.id, data: 0}, [{id: item.id, count: 9, data: 1}]);
         Recipes2.addShapeless({id: item.id, count: 9, data: 1}, [{id: item.id, data: 0}]);
-        Item.addCreativeGroup("nc_fission_material", "Fission Material", [item.id]);
+        Item.addCreativeGroup("nc_fission_material", Translation.translate("Fission Materials"), [item.id]);
         return item;
     }
 

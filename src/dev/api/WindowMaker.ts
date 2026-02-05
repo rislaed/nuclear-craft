@@ -1,4 +1,5 @@
 class NCWindowMaker extends WindowMaker {
+    private title: string;
 
     constructor(title: string, width: number, height: number, frame?: string){
         super(title, width, height, frame);
@@ -35,6 +36,14 @@ class NCWindowMaker extends WindowMaker {
         this.addScale(name, x, y, bmpBack, bmpFront, direction, thickness);
         this.setTooltipFunc(name, elem => (elem.getBinding("value") * 100).toFixed(1) + "%");
         return this;
+    }
+
+    override makeWindow() {
+        if (this.content.standard?.header?.text?.text) {
+            this.title = this.title || this.content.standard.header.text.text;
+            this.content.standard.header.text.text = Translation.translate(this.title);
+        }
+        return super.makeWindow();
     }
 
 }

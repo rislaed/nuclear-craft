@@ -1,4 +1,4 @@
-Item.addCreativeGroup("nc_passive", "Item/Fluid Generator", [
+Item.addCreativeGroup("nc_passive", Translation.translate("Item/Fluid Generators"), [
 
     NCItem.createBlock("passive_cobblestone", "Cobblestone Generator"),
     NCItem.createBlock("passive_cobblestone_compact", "Compact Cobblestone Generator"),

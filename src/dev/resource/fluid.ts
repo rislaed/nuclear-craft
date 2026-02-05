@@ -16,7 +16,7 @@ class ItemFluidCell extends NCItem.ItemInstance {
 //FluidRegistry.genCellTex("lava", LiquidRegistry.getLiquidUIBitmap("lava", 16, 16));
 //FluidRegistry.genCellTex("milk", LiquidRegistry.getLiquidUIBitmap("milk", 16, 16));
 
-Item.addCreativeGroup("nc_cell", "NC Cell", [
+Item.addCreativeGroup("nc_cell", Translation.translate("Fission Cells"), [
     NCItem.createItem("cell_empty", "Empty Cell"),
     ItemRegistry.registerItem(new ItemFluidCell("cell_water", "water")).id,
     ItemRegistry.registerItem(new ItemFluidCell("cell_lava", "lava")).id,
@@ -79,7 +79,7 @@ FluidRegistry.register("carbon_dioxide", "Carbon Dioxide", "GAS", "#5C635A");
 FluidRegistry.register("carbon_monoxide", "Carbon Monoxide", "GAS", "#4C5649");
 FluidRegistry.register("ethene", "Ethylene", "GAS", "#FFE4A3");
 
-FluidRegistry.register("fluoromethane", "Fluorimethane", "GAS", "#424C05");
+FluidRegistry.register("fluoromethane", "Fluoromethane", "GAS", "#424C05");
 FluidRegistry.register("ammonia", "Ammonia", "GAS", "#7AC3A0");
 FluidRegistry.register("oxygen_difluoride", "Oxygen Difluoride", "GAS", "#EA1B01");
 FluidRegistry.register("diborane", "Diborane", "GAS", "#CC6E8C");
@@ -113,11 +113,11 @@ FluidRegistry.register("hotcoolant_NaK", "Hot Eutectic NaK Alloy", "MOLTEN", "#F
 
 FluidRegistry.register("molten_BAs", "Molten Boron Arsenide", "MOLTEN", "#9B9B89");
 
-FluidRegistry.register("SiC_vapor", "Silicon Carbide Vapor", "GAS", "#78746A");
+FluidRegistry.register("SiC_vapor", "Sublimated Silicon Carbide", "GAS", "#78746A");
 
 FluidRegistry.register("molten_alugentum", "Molten Alugentum", "MOLTEN", "#B5C9CB");
 FluidRegistry.register("molten_alumina", "Molten Alumina", "MOLTEN", "#919880");
 FluidRegistry.register("molten_aluminum", "Molten Aluminum", "MOLTEN", "#B5ECD5");
 FluidRegistry.register("molten_silver", "Molten Silver", "MOLTEN", "#E2DAF6");
 
-FluidRegistry.register("molten_ender", "Resonant Ender");
+FluidRegistry.register("molten_ender", "Molten Ender");

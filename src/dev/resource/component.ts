@@ -10,7 +10,7 @@ ConnectedTexture.setModelForGlass(NCID.reactor_casing, 1, "nc_reactor_casing_tra
 
 NCItem.createBlock("reactor_cell", "Reactor Cell");
 
-Item.addCreativeGroup("nc_cooler", "Fission Cooler", [
+Item.addCreativeGroup("nc_cooler", Translation.translate("Fission Coolers"), [
     NCItem.createBlock("cooler_empty", "Empty Cooler"),
     NCItem.createBlock("cooler_water", "Water Cooler"),
     NCItem.createBlock("cooler_redstone", "Redstone Cooler"),
@@ -19,7 +19,7 @@ Item.addCreativeGroup("nc_cooler", "Fission Cooler", [
     NCItem.createBlock("cooler_glowstone", "Glowstone Cooler"),
     NCItem.createBlock("cooler_lapis", "Lapis Cooler"),
     NCItem.createBlock("cooler_diamond", "Diamond Cooler"),
-    NCItem.createBlock("cooler_helium", "Helium Cooler"),
+    NCItem.createBlock("cooler_helium", "Liquid Helium Cooler"),
     NCItem.createBlock("cooler_enderium", "Enderium Cooler"),
     NCItem.createBlock("cooler_cryotheum", "Cryotheum Cooler"),
     NCItem.createBlock("cooler_iron", "Iron Cooler"),

@@ -10,9 +10,9 @@ class FissionFuel {
     private static data: {[id: number]: FissionFuelParams} = {};
 
     static create(key: string, name: string, time: number, power: number, heat: number): ItemBase {
-        const item = ItemRegistry.registerItem(new this.Instance(key, name));
-        Item.addCreativeGroup("nc_fission_fuel", "Fission Fuel", [item.id]);
-        this.data[item.id] = {name: name, time: time, power: power, heat: heat};
+        const item = ItemRegistry.registerItem(new this.Instance(key, name + " Fuel"));
+        Item.addCreativeGroup("nc_fission_fuel", Translation.translate("Fission Fuels"), [item.id]);
+        this.data[item.id] = {name: name + " Fuel", time: time, power: power, heat: heat};
         return item;
     }
 

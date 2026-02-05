@@ -53,9 +53,9 @@ Item.addCreativeGroup("ingot", Translation.translate("Ingots"), [
     NCItem.createItem("alloy_extreme", "Extreme Alloy"),
     NCItem.createItem("alloy_thermal", "Thermoconducting Alloy"),
     NCItem.createItem("alloy_zircaloy", "Zircaloy"),
-    NCItem.createItem("alloy_SiC", "Silicon Carbide Alloy"),
+    NCItem.createItem("alloy_SiC", "Silicon Carbide Ingot"),
     NCItem.createItem("alloy_sic_sic_cmc", "SiC-SiC Ceramic Matrix Composite"),
-    NCItem.createItem("alloy_hsla_steel", "HSLA Steel Alloy"),
+    NCItem.createItem("alloy_hsla_steel", "HSLA Steel Ingot"),
     NCItem.createItem("alloy_enderium", "Enderium Ingot", "ingotEnderium")
 ]);
 
@@ -104,7 +104,7 @@ Item.addCreativeGroup("dust", Translation.translate("Dusts"), [
 
 Recipes2.addShapeless({id: NCID.dust_lead, data: 0}, [{id: NCID.dust_lead, count: 9, data: 1}]);
 
-Item.addCreativeGroup("gem", "Gem", [
+Item.addCreativeGroup("gem", Translation.translate("Gems"), [
     NCItem.createItem("gem_rhodochrosite", "Rhodochrosite"),
     NCItem.createItem("gem_boron_nitride", "Cubic Boron Nitride"),
     NCItem.createItem("gem_fluorite", "Fluorite"),
@@ -114,7 +114,7 @@ Item.addCreativeGroup("gem", "Gem", [
     NCItem.createItem("gem_silicon", "Silicon")
 ]);
 
-Item.addCreativeGroup("nc_comp", "Compound", [
+Item.addCreativeGroup("nc_comp", Translation.translate("Compounds"), [
     NCItem.createItem("comp_CaSO4", "Calcium Sulfate"),
     NCItem.createItem("comp_crystal_binder", "Crystal Binder"),
     NCItem.createItem("comp_energetic", "Energetic Blend"),
@@ -142,7 +142,7 @@ NCItem.createItem("battery", "Lithium Ion Cell");
 
 NCItem.createBlock("chassis", "Machine Chassis");
 NCItem.createBlock("empty_frame", "Empty Frame");
-NCItem.createBlock("steel_frame", "Steel Frame");
+NCItem.createBlock("steel_frame", "Steel Chassis");
 
 
 const setChassisModel = (id: number, texture: string): void => {
