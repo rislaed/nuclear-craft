@@ -23,17 +23,19 @@ Translation.addTranslation("Rock Crusher", { zh: "岩石粉碎机", ru: "Кам�
 
 Translation.addTranslation("Fission Reactor", { zh: "裂变反应堆", ru: "Реактор деления", pt: "Reator de Fissão", de: "Spaltungsreaktor" });
 // Base depletion time: ${FissionFuel.tickToString(params.time)}
-// Translation.addTranslation("Depletion time:", { ru: "Время процесса:" });
+Translation.addTranslation("Base Depletion Time: %s", { zh: "基础衰竭时间：%s", ru: "Базовое время отработки: %s", fr: "Temps de déterioration de base: %s" });
 // Base power gen: ${params.power} RF/t
-// Translation.addTranslation("Power Gen:", { zh: "发电量:", ru: "Генерация энергии:", pt: "Geração de Energia:", de: "Energieerzeugung:" });
 // Base heat gen: ${params.heat} H/t
-// Translation.addTranslation("Base heat gen:", { ru: "Базовый теплогенератор:" });
+Translation.addTranslation("Base Heat Gen: %s", { zh: "基础产热：%s", ru: "Базовое тепловыделение: %s", fr: "Génération de chaleur de base: %s" });
+
 
 Translation.addTranslation("Decay Generator", { zh: "衰变产能器", ru: "Генератор распада", pt: "Gerador Apodrecedor", fr: "Générateur à désintégration", de: "Zerfallsgenerator" });
 // Math.ceil(data.lifetime / 60) + " min"
 // data.lifetime + " s"
 // Mean lifetime: ${time}
+Translation.addTranslation("Mean Lifetime:", { zh: "平均寿命：", ru: "Период полураспада:", fr: "Temps de vie moyen:" });
 // Power gen: ${data.power} RF/s
+Translation.addTranslation("Power Gen:", { zh: "产能：", ru: "Генерация энергии:", fr: "Génération d'énergie:" });
 
 // Nuclear Furnace Fuel
 Translation.addTranslation("Fuel", { ru: "Топливо", de: "Brennstoff" });
@@ -54,14 +56,15 @@ Translation.addTranslation("Elite Lithium Ion Battery", { zh: "精英锂离子�
 
 // "RF: " + ["Input", "Output", "None"][mode[coords.side]]
 // Energy Stored: ${energy} / ${storage} ${["", "k", "M", "G"][scale]}RF
-// Translation.addTranslation("Energy Stored:", { zh: "存储能量:", ru: "Хранится энергии:", pt: "Energia Armazenada:", de: "Gespeicherte Energie:" });
+Translation.addTranslation("Energy Stored:", { zh: "储能：", ru: "Запас энергии:", fr: "Energie enmagasinée:" });
 
 
 Translation.addTranslation("Fission Controller", { zh: "裂变控制器", ru: "Контроллер деления", pt: "Controlador de Fissão", de: "Spaltungsregeler" });
 // [this.networkData.getInt("statSizeX"), this.networkData.getInt("statSizeY"), this.networkData.getInt("statSizeZ")].join("x") + " Fission Reactor"
+// "Cells: " + status.cells
+Translation.addTranslation("Cells:", { zh: "单元数:", ru: "Ячейки:", pt: "Células:", de: "Zellen:" });
 // fuelData ? fuelData.name : "No Fuel"
 Translation.addTranslation("No Fuel", { zh: "没有燃料", ru: "Нет топливо", pt: "Sem Combustível", de: "Kein Brennstoff" });
-Translation.addTranslation("Cells:", { zh: "单元数:", ru: "Ячейки:", pt: "Células:", de: "Zellen:" });
 // status.power + " RF/t"
 // (status.cooling > 0 ? status.heat + " - " + status.cooling + " = " : "") + (status.heat - status.cooling) + " H/t"
 
@@ -102,7 +105,7 @@ Translation.addTranslation("Must be adjacent to at least one Reactor Casing and 
 
 
 // "Cooling rate: " + coolerData.cooling + "H/t"
-Translation.addTranslation("Cooling rate:", { zh: "冷却速率:", ru: "Скорость охлаждения:", pt: "Taxa de Resfriamento:", de: "Kühlrate:" });
+Translation.addTranslation("Cooling Rate:", { zh: "冷却速率：", ru: "Скорость охлаждения:", fr: "Vitesse de refroidissement:" });
 // coolerData.description
 
 
@@ -357,28 +360,119 @@ Translation.addTranslation("Molten Ender", { zh: "谐振熔融末影珍珠", ru:
 
 
 // Fission Fuel
-// ...
+// ... without Fuel suffix
+Translation.addTranslation("TBU Fuel", { zh: "TBU燃料", ru: "Топливо TBU", pt: "Combustível TBU", de: "TBU Kernbrennstoff" });
+Translation.addTranslation("TBU Oxide Fuel", { zh: "氧化TBU燃料", ru: "Оксидное Топливо TBU", pt: "Óxido de Combustível TBU", de: "TBU Oxid Kernbrennstoff" });
+Translation.addTranslation("LEU-233 Fuel", { zh: "低密度铀-233燃料", ru: "Топливо LEU-233", pt: "Pastilha de LEU-233", de: "LEU-233 Kernbrennstoff" });
+Translation.addTranslation("LEU-233 Oxide Fuel", { zh: "低密度氧化铀-233燃料", ru: "Оксидное топливо LEU-233", pt: "Pastilha de Óxido de LEU-233", de: "LEU-233 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEU-233 Fuel", { zh: "高密度铀-233燃料", ru: "Топливо HEU-233", pt: "Pastilha de HEU-233", de: "HEU-233 Kernbrennstoff" });
+Translation.addTranslation("HEU-233 Oxide Fuel", { zh: "高密度氧化铀-233燃料", ru: "Оксидное топливо HEU-233", pt: "Pastilha de Óxido de HEU-233", de: "HEU-233 Oxid Kernbrennstoff" });
+Translation.addTranslation("LEU-235 Fuel", { zh: "低密度铀-235燃料", ru: "Топливо LEU-235", pt: "Pastilha de LEU-235", de: "LEU-235 Kernbrennstoff" });
+Translation.addTranslation("LEU-235 Oxide Fuel", { zh: "低密度氧化铀-235燃料", ru: "Оксидное топливо LEU-235", pt: "Pastilha de Óxido de LEU-235", de: "LEU-235 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEU-235 Fuel", { zh: "高密度铀-235燃料", ru: "Топливо HEU-235", pt: "Pastilha de HEU-235", de: "HEU-235 Kernbrennstoff" });
+Translation.addTranslation("HEU-235 Oxide Fuel", { zh: "高密度氧化铀-235燃料", ru: "Оксидное топливо HEU-235", pt: "Pastilha de Óxido de HEU-235", de: "HEU-235 Oxid Kernbrennstoff" });
+Translation.addTranslation("LEN-236 Fuel", { zh: "低密度镎-236燃料", ru: "Топливо LEN-236", pt: "Pastilha de LEN-236", de: "LEN-236 Kernbrennstoff" });
+Translation.addTranslation("LEN-236 Oxide Fuel", { zh: "低密度氧化镎-236燃料", ru: "Оксидное топливо LEN-236", pt: "Pastilha de Óxido de LEN-236", de: "LEN-236 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEN-236 Fuel", { zh: "高密度镎-236燃料", ru: "Топливо HEN-236", pt: "Pastilha de HEN-236", de: "HEN-236 Kernbrennstoff" });
+Translation.addTranslation("HEN-236 Oxide Fuel", { zh: "高密度氧化镎-236燃料", ru: "Оксидное топливо HEN-236", pt: "Pastilha de Óxido de HEN-236", de: "HEN-236 Oxid Kernbrennstoff" });
+Translation.addTranslation("LEP-239 Fuel", { zh: "低密度钚-239燃料", ru: "Топливо LEP-239", pt: "Pastilha de LEP-239", de: "LEP-239 Kernbrennstoff" });
+Translation.addTranslation("LEP-239 Oxide Fuel", { zh: "低密度氧化钚-239燃料", ru: "Оксидное топливо LEP-239", pt: "Pastilha de Óxido de LEP-239", de: "LEP-239 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEP-239 Fuel", { zh: "高密度钚-239燃料", ru: "Топливо HEP-239", pt: "Pastilha de HEP-239", de: "HEP-239 Kernbrennstoff" });
+Translation.addTranslation("HEP-239 Oxide Fuel", { zh: "高密度氧化钚-239燃料", ru: "Оксидное топливо HEP-239", pt: "Pastilha de Óxido de HEP-239", de: "HEP-239 Oxid Kernbrennstoff" });
+Translation.addTranslation("LEP-241 Fuel", { zh: "低密度钚-241燃料", ru: "Топливо LEP-241", pt: "Pastilha de LEP-241", de: "LEP-241 Kernbrennstoff" });
+Translation.addTranslation("LEP-241 Oxide Fuel", { zh: "低密度氧化钚-241燃料", ru: "Оксидное топливо LEP-241", pt: "Pastilha de Óxido de LEP-241", de: "LEP-241 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEP-241 Fuel", { zh: "高密度钚-241燃料", ru: "Топливо HEP-241", pt: "Pastilha de HEP-241", de: "HEP-241 Kernbrennstoff" });
+Translation.addTranslation("HEP-241 Oxide Fuel", { zh: "高密度氧化钚-241燃料", ru: "Оксидное топливо HEP-241", pt: "Pastilha de Óxido de HEP-241", de: "HEP-241 Oxid Kernbrennstoff" });
+Translation.addTranslation("MOX-239 Fuel", { zh: "MOX-239 燃料", ru: "Топливо MOX-239", pt: "Pastilha de MOX-239", de: "MOX-239 Kernbrennstoff" });
+Translation.addTranslation("MOX-241 Fuel", { zh: "MOX-241 燃料", ru: "Топливо MOX-241", pt: "Pastilha de MOX-241", de: "MOX-241 Kernbrennstoff" });
+Translation.addTranslation("LEA-242 Fuel", { zh: "低密度镅-242燃料", ru: "Топливо LEA-242", pt: "Pastilha de LEA-242", de: "LEA-242 Kernbrennstoff" });
+Translation.addTranslation("LEA-242 Oxide Fuel", { zh: "低密度氧化镅-242燃料", ru: "Оксидное топливо LEA-242", pt: "Pastilha de Óxido de LEA-242", de: "LEA-242 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEA-242 Fuel", { zh: "高密度镅-242燃料", ru: "Топливо HEA-242", pt: "Pastilha de HEA-242", de: "HEA-242 Kernbrennstoff" });
+Translation.addTranslation("HEA-242 Oxide Fuel", { zh: "高密度氧化镅-242燃料", ru: "Оксидное топливо HEA-242", pt: "Pastilha de Óxido de HEA-242", de: "HEA-242 Oxid Kernbrennstoff" });
+Translation.addTranslation("LECm-243 Fuel", { zh: "低密度锔-243燃料", ru: "Топливо LECm-243", pt: "Pastilha de LECm-243", de: "LECm-243 Kernbrennstoff" });
+Translation.addTranslation("LECm-243 Oxide Fuel", { zh: "低密度氧化锔-243燃料", ru: "Оксидное топливо LECm-243", pt: "Pastilha de Óxido de LECm-243", de: "LECm-243 Oxid Kernbrennstoff" });
+Translation.addTranslation("HECm-243 Fuel", { zh: "高密度锔-243燃料", ru: "Топливо HECm-243", pt: "Pastilha de HECm-243", de: "HECm-243 Kernbrennstoff" });
+Translation.addTranslation("HECm-243 Oxide Fuel", { zh: "高密度氧化锔-243燃料", ru: "Оксидное топливо HECm-243", pt: "Pastilha de Óxido de HECm-243", de: "HECm-243 Oxid Kernbrennstoff" });
+Translation.addTranslation("LECm-245 Fuel", { zh: "低密度锔-245燃料", ru: "Топливо LECm-245", pt: "Pastilha de LECm-245", de: "LECm-245 Kernbrennstoff" });
+Translation.addTranslation("LECm-245 Oxide Fuel", { zh: "低密度氧化锔-245燃料", ru: "Оксидное топливо LECm-245", pt: "Pastilha de Óxido de LECm-245", de: "LECm-245 Oxid Kernbrennstoff" });
+Translation.addTranslation("HECm-245 Fuel", { zh: "高密度锔-245燃料", ru: "Топливо HECm-245", pt: "Pastilha de HECm-245", de: "HECm-245 Kernbrennstoff" });
+Translation.addTranslation("HECm-245 Oxide Fuel", { zh: "高密度氧化锔-245燃料", ru: "Оксидное топливо HECm-245", pt: "Pastilha de Óxido de HECm-245", de: "HECm-245 Oxid Kernbrennstoff" });
+Translation.addTranslation("LECm-247 Fuel", { zh: "低密度锔-247燃料", ru: "Топливо LECm-247", pt: "Pastilha de LECm-247", de: "LECm-247 Kernbrennstoff" });
+Translation.addTranslation("LECm-247 Oxide Fuel", { zh: "低密度氧化锔-247燃料", ru: "Оксидное топливо LECm-247", pt: "Pastilha de Óxido de LECm-247", de: "LECm-247 Oxid Kernbrennstoff" });
+Translation.addTranslation("HECm-247 Fuel", { zh: "高密度锔-247燃料", ru: "Топливо HECm-247", pt: "Pastilha de HECm-247", de: "HECm-247 Kernbrennstoff" });
+Translation.addTranslation("HECm-247 Oxide Fuel", { zh: "高密度氧化锔-247燃料", ru: "Оксидное топливо HECm-247", pt: "Pastilha de Óxido de HECm-247", de: "HECm-247 Oxid Kernbrennstoff" });
+Translation.addTranslation("LEB-248 Fuel", { zh: "低密度锫-248燃料", ru: "Топливо LEB-248", pt: "Pastilha de LEB-248", de: "LEB-248 Kernbrennstoff" });
+Translation.addTranslation("LEB-248 Oxide Fuel", { zh: "低密度氧化锫-248燃料", ru: "Оксидное топливо LEB-248", pt: "Pastilha de Óxido de LEB-248", de: "LEB-248 Oxid Kernbrennstoff" });
+Translation.addTranslation("HEB-248 Fuel", { zh: "高密度锫-248燃料", ru: "Топливо HEB-248", pt: "Pastilha de HEB-248", de: "HEB-248 Kernbrennstoff" });
+Translation.addTranslation("HEB-248 Oxide Fuel", { zh: "高密度氧化锫-248燃料", ru: "Оксидное топливо HEB-248", pt: "Pastilha de Óxido de HEB-248", de: "HEB-248 Oxid Kernbrennstoff" });
+Translation.addTranslation("LECf-249 Fuel", { zh: "低密度锎-249燃料", ru: "Топливо LECf-249", pt: "Pastilha de LECf-249", de: "LECf-249 Kernbrennstoff" });
+Translation.addTranslation("LECf-249 Oxide Fuel", { zh: "低密度氧化锎-249燃料", ru: "Оксидное топливо LECf-249", pt: "Pastilha de Óxido de LECf-249", de: "LECf-249 Oxid Kernbrennstoff" });
+Translation.addTranslation("HECf-249 Fuel", { zh: "高密度锎-249燃料", ru: "Топливо HECf-249", pt: "Pastilha de HECf-249", de: "HECf-249 Kernbrennstoff" });
+Translation.addTranslation("HECf-249 Oxide Fuel", { zh: "高密度氧化锎-249燃料", ru: "Оксидное топливо HECf-249", pt: "Pastilha de Óxido de HECf-249", de: "HECf-249 Oxid Kernbrennstoff" });
+Translation.addTranslation("LECf-251 Fuel", { zh: "低密度锎-251燃料", ru: "Топливо LECf-251", pt: "Pastilha de LECf-251", de: "LECf-251 Kernbrennstoff" });
+Translation.addTranslation("LECf-251 Oxide Fuel", { zh: "低密度氧化锎-251燃料", ru: "Оксидное топливо LECf-251", pt: "Pastilha de Óxido de LECf-251", de: "LECf-251 Oxid Kernbrennstoff" });
+Translation.addTranslation("HECf-251 Fuel", { zh: "高密度锎-251燃料", ru: "Топливо HECf-251", pt: "Pastilha de HECf-251", de: "HECf-251 Kernbrennstoff" });
+Translation.addTranslation("HECf-251 Oxide Fuel", { zh: "高密度氧化锎-251燃料", ru: "Оксидное топливо HECf-251", pt: "Pastilha de Óxido de HECf-251", de: "HECf-251 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted TBU Fuel", { zh: "枯竭TBU燃料", ru: "Обеднённое топливо TBU", pt: "Combustível TBU Esgotado", de: "Erschöpfter TBU Kernbrennstoff" });
+Translation.addTranslation("Depleted TBU Oxide Fuel", { zh: "枯竭氧化TBU燃料", ru: "Обеднённое оксидное топливо TBU", pt: "Óxido de Combustível TBU Esgotado", de: "Erschöpfter TBU Kernbrennstoff" });
+Translation.addTranslation("Depleted LEU-233 Fuel", { zh: "枯竭低密度铀-233燃料", ru: "Обеднённое топливо LEU-233 ", pt: "Haste de Combustível LEU-233 Esgotado", de: "Erschöpfter LEU-233 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEU-233 Oxide Fuel", { zh: "枯竭低密度氧化铀-233燃料", ru: "Обеднённое оксидное топливо LEU-233", pt: "Haste de Combustível Óxido de LEU-233 Esgotado", de: "Erschöpfter LEU-233 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEU-233 Fuel", { zh: "枯竭高密度铀-233燃料", ru: "Обеднённое топливо  HEU-233 ", pt: "Haste de Combustível HEU-233 Esgotado", de: "Erschöpfter HEU-233 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEU-233 Oxide Fuel", { zh: "枯竭高密度氧化铀-233燃料", ru: "Обеднённое оксидное топливо HEU-233", pt: "Haste de Combustível Óxido de HEU-233 Esgotado", de: "Erschöpfter HEU-233 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LEU-235 Fuel", { zh: "枯竭低密度铀-235燃料", ru: "Обеднённое топливо  LEU-235 ", pt: "Haste de Combustível LEU-235 Esgotado", de: "Erschöpfter LEU-235 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEU-235 Oxide Fuel", { zh: "枯竭低密度氧化铀-235燃料", ru: "Обеднённое оксидное топливо LEU-235", pt: "Haste de Combustível Óxido de LEU-235 Esgotado", de: "Erschöpfter LEU-235 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEU-235 Fuel", { zh: "枯竭高密度铀-235燃料", ru: "Обеднённое топливо  HEU-235 ", pt: "Haste de Combustível HEU-235 Esgotado", de: "Erschöpfter HEU-235 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEU-235 Oxide Fuel", { zh: "枯竭高密度氧化铀-235燃料", ru: "Обеднённое оксидное топливо HEU-235", pt: "Haste de Combustível Óxido de HEU-235 Esgotado", de: "Erschöpfter HEU-235 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LEN-236 Fuel", { zh: "枯竭低密度镎-236燃料", ru: "Обеднённое топливо  LEN-236 ", pt: "Haste de Combustível LEN-236 Esgotado", de: "Erschöpfter LEN-236 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEN-236 Oxide Fuel", { zh: "枯竭低密度氧化镎-236燃料", ru: "Обеднённое оксидное топливо LEN-236", pt: "Haste de Combustível Óxido de LEN-236 Esgotado", de: "Erschöpfter LEN-236 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEN-236 Fuel", { zh: "枯竭高密度镎-236燃料", ru: "Обеднённое топливо  HEN-236 ", pt: "Haste de Combustível HEN-236 Esgotado", de: "Erschöpfter HEN-236 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEN-236 Oxide Fuel", { zh: "枯竭高密度氧化镎-236燃料", ru: "Обеднённое оксидное топливо HEN-236", pt: "Haste de Combustível Óxido de HEN-236 Esgotado", de: "Erschöpfter HEN-236 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LEP-239 Fuel", { zh: "枯竭低密度钚-239燃料", ru: "Обеднённое топливо  LEP-239 ", pt: "Haste de Combustível LEP-239 Esgotado", de: "Erschöpfter LEP-239 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEP-239 Oxide Fuel", { zh: "枯竭低密度氧化钚-239燃料", ru: "Обеднённое оксидное топливо LEP-239", pt: "Haste de Combustível Óxido de LEP-239 Esgotado", de: "Erschöpfter LEP-239 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEP-239 Fuel", { zh: "枯竭高密度钚-239燃料", ru: "Обеднённое топливо  HEP-239 ", pt: "Haste de Combustível HEP-239 Esgotado", de: "Erschöpfter HEP-239 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEP-239 Oxide Fuel", { zh: "枯竭高密度氧化钚-239燃料", ru: "Обеднённое оксидное топливо HEP-239", pt: "Haste de Combustível Óxido de HEP-239 Esgotado", de: "Erschöpfter HEP-239 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LEP-241 Fuel", { zh: "枯竭低密度钚-241燃料", ru: "Обеднённое топливо  LEP-241 ", pt: "Haste de Combustível LEP-241 Esgotado", de: "Erschöpfter LEP-241 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEP-241 Oxide Fuel", { zh: "枯竭低密度氧化钚-241燃料", ru: "Обеднённое оксидное топливо LEP-241", pt: "Haste de Combustível Óxido de LEP-241 Esgotado", de: "Erschöpfter LEP-241 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEP-241 Fuel", { zh: "枯竭高密度钚-241燃料", ru: "Обеднённое топливо  HEP-241 ", pt: "Haste de Combustível HEP-241 Esgotado", de: "Erschöpfter HEP-241 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEP-241 Oxide Fuel", { zh: "枯竭高密度氧化钚-241燃料", ru: "Обеднённое оксидное топливо HEP-241", pt: "Haste de Combustível Óxido de HEP-241 Esgotado", de: "Erschöpfter HEP-241 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted MOX-239 Fuel", { zh: "枯竭MOX-239燃料", ru: "Обеднённое топливо MOX-239", pt: "Haste de Combustível MOX-239 Esgotado", de: "Erschöpfter MOX-239 Kernbrennstoff" });
+Translation.addTranslation("Depleted MOX-241 Fuel", { zh: "枯竭MOX-241燃料", ru: "Обеднённое оксидное топливо MOX-241", pt: "Haste de Combustível MOX-241 Esgotado", de: "Erschöpfter MOX-241 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEA-242 Fuel", { zh: "枯竭低密度镅-242燃料", ru: "Обеднённое топливо LEA-242 ", pt: "Haste de Combustível LEA-242 Esgotado", de: "Erschöpfter LEA-242 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEA-242 Oxide Fuel", { zh: "枯竭高密度氧化镅-242燃料", ru: "Обеднённое оксидное топливо LEA-242", pt: "Haste de Combustível Óxido de LEA-242 Esgotado", de: "Erschöpfter LEA-242 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEA-242 Fuel", { zh: "枯竭高密度镅-242燃料", ru: "Обеднённое топливо HEA-242 ", pt: "Haste de Combustível HEA-242 Esgotado", de: "Erschöpfter HEA-242 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-243 Fuel", { zh: "枯竭低密度锔-243燃料", ru: "Обеднённое топливо LECm-243 ", pt: "Haste de Combustível LECm-243 Esgotado", de: "Erschöpfter LECm-243 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-243 Oxide Fuel", { zh: "枯竭低密度氧化锔-243燃料", ru: "Обеднённое оксидное топливо LECm-243", pt: "Haste de Combustível Óxido de LECm-243 Esgotado", de: "Erschöpfter LECm-243 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-243 Fuel", { zh: "枯竭高密度锔-243燃料", ru: "Обеднённое топливо HECm-243 ", pt: "Haste de Combustível HECm-243 Esgotado", de: "Erschöpfter HECm-243 Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-243 Oxide Fuel", { zh: "枯竭高密度氧化锔-243燃料", ru: "Обеднённое оксидное топливо HECm-243", pt: "Haste de Combustível Óxido de HECm-243 Esgotado", de: "Erschöpfter HECm-243 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-245 Fuel", { zh: "枯竭低密度锔-245燃料", ru: "Обеднённое топливо LECm-245 ", pt: "Haste de Combustível LECm-245 Esgotado", de: "Erschöpfter LECm-245 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-245 Oxide Fuel", { zh: "枯竭低密度氧化锔-245燃料", ru: "Обеднённое оксидное топливо LECm-245 ", pt: "Haste de Combustível Óxido de LECm-245 Esgotado", de: "Erschöpfter LECm-245 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-245 Fuel", { zh: "枯竭高密度锔-245燃料", ru: "Обеднённое топливо HECm-245 ", pt: "Haste de Combustível HECm-245 Esgotado", de: "Erschöpfter HECm-245 Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-245 Oxide Fuel", { zh: "枯竭高密度氧化锔-245燃料", ru: "Обеднённое оксидное топливо HECm-245", pt: "Haste de Combustível Óxido de HECm-245 Esgotado", de: "Erschöpfter HECm-245 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-247 Fuel", { zh: "枯竭低密度锔-247燃料", ru: "Обеднённое топливо LECm-247 ", pt: "Haste de Combustível LECm-247 Esgotado", de: "Erschöpfter LECm-247 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECm-247 Oxide Fuel", { zh: "枯竭低密度氧化锔-247燃料", ru: "Обеднённое оксидное топливо LECm-247", pt: "Haste de Combustível Óxido de LECm-247 Esgotado", de: "Erschöpfter LECm-247 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-247 Fuel", { zh: "枯竭高密度锔-247燃料", ru: "Обеднённое топливо HECm-247 ", pt: "Haste de Combustível HECm-247 Esgotado", de: "Erschöpfter HECm-247 Kernbrennstoff" });
+Translation.addTranslation("Depleted HECm-247 Oxide Fuel", { zh: "枯竭高密度氧化锔-247燃料", ru: "Обеднённое оксидное топливо HECm-247", pt: "Haste de Combustível Óxido de HECm-247 Esgotado", de: "Erschöpfter HECm-247 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LEB-248 Fuel", { zh: "枯竭低密度锫-248燃料", ru: "Обеднённое топливо LEB-248 ", pt: "Haste de Combustível LEB-248 Esgotado", de: "Erschöpfter LEB-248 Kernbrennstoff" });
+Translation.addTranslation("Depleted LEB-248 Oxide Fuel", { zh: "枯竭低密度氧化锫-248燃料", ru: "Обеднённое оксидное топливо LEB-248", pt: "Haste de Combustível Óxido de LEB-248 Esgotado", de: "Erschöpfter LEB-248 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HEB-248 Fuel", { zh: "枯竭高密度锫-248燃料", ru: "Обеднённое топливо HEB-248 ", pt: "Haste de Combustível HEB-248 Esgotado", de: "Erschöpfter HEB-248 Kernbrennstoff" });
+Translation.addTranslation("Depleted HEB-248 Oxide Fuel", { zh: "枯竭高密度氧化锫-248燃料", ru: "Обеднённое оксидное топливо HEB-248", pt: "Haste de Combustível Óxido de HEB-248 Esgotado", de: "Erschöpfter HEB-248 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LECf-249 Fuel", { zh: "枯竭低密度锎-249燃料", ru: "Обеднённое топливо LECf-249 ", pt: "Haste de Combustível LECf-249 Esgotado", de: "Erschöpfter LECf-249 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECf-249 Oxide Fuel", { zh: "枯竭低密度氧化锎-249燃料", ru: "Обеднённое оксидное топливо LECf-249", pt: "Haste de Combustível Óxido de LECf-249 Esgotado", de: "Erschöpfter LECf-249 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HECf-249 Fuel", { zh: "枯竭高密度锎-249燃料", ru: "Обеднённое топливо HECf-249 ", pt: "Haste de Combustível HECf-249 Esgotado", de: "Erschöpfter HECf-249 Kernbrennstoff" });
+Translation.addTranslation("Depleted HECf-249 Oxide Fuel", { zh: "枯竭高密度氧化锎-249燃料", ru: "Обеднённое оксидное топливо HECf-249", pt: "Haste de Combustível Óxido de HECf-249 Esgotado", de: "Erschöpfter HECf-249 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted LECf-251 Fuel", { zh: "枯竭低密度锎-251燃料", ru: "Обеднённое топливо LECf-251 ", pt: "Haste de Combustível LECf-251 Esgotado", de: "Erschöpfter LECf-251 Kernbrennstoff" });
+Translation.addTranslation("Depleted LECf-251 Oxide Fuel", { zh: "枯竭低密度氧化锎-251燃料", ru: "Обеднённое оксидное топливо LECf-251", pt: "Haste de Combustível Óxido de LECf-251 Esgotado", de: "Erschöpfter LECf-251 Oxid Kernbrennstoff" });
+Translation.addTranslation("Depleted HECf-251 Fuel", { zh: "枯竭高密度锎-251燃料", ru: "Обеднённое топливо HECf-251 ", pt: "Haste de Combustível HECf-251 Esgotado", de: "Erschöpfter HECf-251 Kernbrennstoff" });
+Translation.addTranslation("Depleted HECf-251 Oxide Fuel", { zh: "枯竭高密度氧化锎-251燃料", ru: "Обеднённое оксидное топливо HECf-251", pt: "Haste de Combustível Óxido de HECf-251 Esgotado", de: "Erschöpfter HECf-251 Oxid Kernbrennstoff" });
+
 // m + "min"
 // s + "sec"
-// Deplated ...
-// FissionFuel.createWithOxide("TBU", "TBU", 144000, 60, 18);
-// FissionFuel.createLowAndHigh("U233", "U-233", 64000, 144, 60);
-// FissionFuel.createLowAndHigh("U235", "U-235", 72000, 120, 50);
-// FissionFuel.createLowAndHigh("N236", "N-236", 102000, 90, 36);
-// FissionFuel.createLowAndHigh("P239", "P-239", 92000, 105, 40);
-// FissionFuel.createLowAndHigh("P241", "P-241", 60000, 165, 70);
-// FissionFuel.create("MOX239", "MOX-239", 84000, 155.4, 57.5);
-// FissionFuel.create("MOX241", "MOX-241", 56000, 243.6, 97.5);
-// FissionFuel.createLowAndHigh("A242", "A-242", 54000, 192, 94);
-// FissionFuel.createLowAndHigh("Cm243", "Cm-243", 52000, 210, 112);
-// FissionFuel.createLowAndHigh("Cm245", "Cm-245", 68000, 162, 68);
-// FissionFuel.createLowAndHigh("Cm247", "Cm-247", 78000, 138, 54);
-// FissionFuel.createLowAndHigh("B248", "B-248", 86000, 135, 52);
-// FissionFuel.createLowAndHigh("Cf249", "Cf-249", 60000, 216, 116);
-// FissionFuel.createLowAndHigh("Cf251", "Cf-251", 58000, 225, 120);
 // Base process time: ${FissionFuel.tickToString(fuelData.time)}
+Translation.addTranslation("Base Process Time:", { zh: "基础处理时间：", ru: "Базовое время процесса:", fr: "Temps de base du processus:" });
 // Base power: ${fuelData.power} RF/t
+Translation.addTranslation("Base Process Power:", { zh: "基础功率：", ru: "Базовое энергопотребление:", fr: "Énergie de base du processus:" });
 // Base heat gen: ${fuelData.heat} H/t
+Translation.addTranslation("Base Heat Gen:", { zh: "基础产热：", ru: "Базовое тепловыделение:", fr: "Génération de chaleur de base:" });
 
 
 Translation.addTranslation("Speed Upgrade", { zh: "速度升级", ru: "Обновление \"Скорость\"", pt: "Melhoria de Velocidade", fr: "Amélioration de vitesse", de: "Geschwindigkeitsupgrade" });
