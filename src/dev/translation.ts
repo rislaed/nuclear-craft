@@ -1,3 +1,40 @@
+const translate = (text: string, ...format: (string | number | boolean)[]) => {
+	text = Translation.translate(text);
+	if (format && format.length > 0) {
+		format = format.map(
+			(value) => typeof value === "string"
+				? Translation.translate(value) : value
+		);
+		text = java.lang.String.format(text, format);
+	}
+	return "" + text;
+};
+
+interface PluralForms {
+	zero?: string;
+	one: string;
+	few: string;
+	many: string;
+}
+
+const translatePlural = (count: number, forms: PluralForms, ...format: (string | number | boolean)[]) => {
+	format = [count, ...format];
+	if (count === 0) {
+		return translate(forms.zero ?? forms.many, ...format);
+	}
+	count = Math.abs(count);
+	if (count % 10 === 1 && count % 100 !== 11) {
+		return translate(forms.one, ...format);
+	}
+	if (count % 10 === 0 || count % 10 >= 5 || count % 100 - count % 10 === 10) {
+		return translate(forms.many, ...format);
+	}
+	const text = forms.few.replace("~", "" + (count % 10));
+	format[0] = Math.floor(count / 10) * 10;
+	return translate(text, ...format);
+};
+
+
 Translation.addTranslation("Processing Machines", { ru: "Обрабатывающие машины" });
 Translation.addTranslation("Manufactory", { zh: "小制造机", ru: "Мануфактура", fr: "Fabrique" });
 Translation.addTranslation("Isotope Separator", { zh: "同位素分离器", ru: "Изотопный сепаратор", pt: "Separador de Isótopos", de: "Isotopenseparator" });
@@ -21,126 +58,6 @@ Translation.addTranslation("Centrifuge", { zh: "离心机", ru: "Центриф�
 Translation.addTranslation("Rock Crusher", { zh: "岩石粉碎机", ru: "Камнедробилка", fr: "Pulvérisateur de rochers" });
 
 
-Translation.addTranslation("Fission Reactor", { zh: "裂变反应堆", ru: "Реактор деления", pt: "Reator de Fissão", de: "Spaltungsreaktor" });
-// Base depletion time: ${FissionFuel.tickToString(params.time)}
-Translation.addTranslation("Base Depletion Time: %s", { zh: "基础衰竭时间：%s", ru: "Базовое время отработки: %s", fr: "Temps de déterioration de base: %s" });
-// Base power gen: ${params.power} RF/t
-// Base heat gen: ${params.heat} H/t
-Translation.addTranslation("Base Heat Gen: %s", { zh: "基础产热：%s", ru: "Базовое тепловыделение: %s", fr: "Génération de chaleur de base: %s" });
-
-
-Translation.addTranslation("Decay Generator", { zh: "衰变产能器", ru: "Генератор распада", pt: "Gerador Apodrecedor", fr: "Générateur à désintégration", de: "Zerfallsgenerator" });
-// Math.ceil(data.lifetime / 60) + " min"
-// data.lifetime + " s"
-// Mean lifetime: ${time}
-Translation.addTranslation("Mean Lifetime:", { zh: "平均寿命：", ru: "Период полураспада:", fr: "Temps de vie moyen:" });
-// Power gen: ${data.power} RF/s
-Translation.addTranslation("Power Gen:", { zh: "产能：", ru: "Генерация энергии:", fr: "Génération d'énergie:" });
-
-
-Translation.addTranslation("Nuclear Furnace Fuel", { ru: "Термоядерное печное топливо" });
-Translation.addTranslation("Fuel", { ru: "Топливо", de: "Brennstoff" });
-// time + " tick"
-// "(Smelts  " + (time / 10) + "  items)"
-
-
-Translation.addTranslation("Batteries", { ru: "Батарейки" });
-Translation.addTranslation("Basic Voltaic Pile", { zh: "基础伏打电堆", ru: "Базовая вольтаическая куча", pt: "Pilha Voltáica Básica (WIP)", fr: "Pile voltaïque basique", de: "Einfache voltaische Säule" });
-Translation.addTranslation("Advanced Voltaic Pile", { zh: "高级伏打电堆", ru: "Расширенная вольтаическая куча", fr: "Pile voltaïque avancée" });
-Translation.addTranslation("DU Voltaic Pile", { zh: "贫铀伏打电堆", ru: "ДУ вольтаическая куча", fr: "Pile voltaïque DU" });
-Translation.addTranslation("Elite Voltaic Pile", { zh: "精英伏打电堆", ru: "Элитная вольтаическая куча", fr: "Pile voltaïque élite" });
-Translation.addTranslation("Basic Lithium Ion Battery", { zh: "基础锂离子电池块", ru: "Базовая литий-ионная батарея", pt: "Bateria Básica de Íon de Lítio (WIP)", fr: "Accumulateur lithium-ion basique", de: "Einfache Lithium Ionen Batterie" });
-Translation.addTranslation("Advanced Lithium Ion Battery", { zh: "高级锂离子电池块", ru: "Расширенная литий-ионная батарея", fr: "Accumulateur lithium-ion avancé" });
-Translation.addTranslation("DU Lithium Ion Battery", { zh: "贫铀锂离子电池块", ru: "ДУ литий-ионная батарея", fr: "Accumulateur lithium-ion DU" });
-Translation.addTranslation("Elite Lithium Ion Battery", { zh: "精英锂离子电池块", ru: "Элитная литий-ионная батарея", fr: "Accumulateur lithium-ion élite" });
-
-
-// "RF: " + ["Input", "Output", "None"][mode[coords.side]]
-// Energy Stored: ${energy} / ${storage} ${["", "k", "M", "G"][scale]}RF
-Translation.addTranslation("Energy Stored:", { zh: "储能：", ru: "Запас энергии:", fr: "Energie enmagasinée:" });
-
-
-Translation.addTranslation("Fission Controller", { zh: "裂变控制器", ru: "Контроллер деления", pt: "Controlador de Fissão", de: "Spaltungsregeler" });
-// [this.networkData.getInt("statSizeX"), this.networkData.getInt("statSizeY"), this.networkData.getInt("statSizeZ")].join("x") + " Fission Reactor"
-// "Cells: " + status.cells
-Translation.addTranslation("Cells:", { zh: "单元数:", ru: "Ячейки:", pt: "Células:", de: "Zellen:" });
-// fuelData ? fuelData.name : "No Fuel"
-Translation.addTranslation("No Fuel", { zh: "没有燃料", ru: "Нет топливо", pt: "Sem Combustível", de: "Kein Brennstoff" });
-// status.power + " RF/t"
-// (status.cooling > 0 ? status.heat + " - " + status.cooling + " = " : "") + (status.heat - status.cooling) + " H/t"
-
-
-Translation.addTranslation("Fission Coolers", { ru: "Термоядерные охладители" });
-Translation.addTranslation("Empty Cooler", { zh: "空的冷却器", ru: "Пустой охладитель", pt: "Resfriador Vazio", de: "Leerer Kühler" });
-Translation.addTranslation("Water Cooler", { zh: "水冷器", ru: "Водяной охладитель", pt: "Resfriador à Água", de: "Wasserkühler" });
-Translation.addTranslation("Must be adjacent to at least one Reactor Cell or active moderator block.", { zh: "必须接触至少一个反应单元或一个减速剂方块.", ru: "Должен коснуться хотя бы одной ячейки реактора или активного блока модератора.", pt: "Deve tocar ao menos uma estrutura de reator.", de: "Muss mindestens eine Reaktorzelle oder einen aktiven Moderatorblock berühren." });
-Translation.addTranslation("Redstone Cooler", { zh: "红石冷却器", ru: "Редстоуновый охладитель", pt: "Resfriador à Redstone", de: "Redstone Cooler" });
-Translation.addTranslation("Must be adjacent to at least one Reactor Cell.", { zh: "必须接触至少一个反应堆单元.", ru: "Необходимо коснуться хотя бы одной ячейки реактора.", pt: "Deve tocar ao menos uma célula de reator.", de: "Muss mindestens eine Reaktorzelle berühren." });
-Translation.addTranslation("Quartz Cooler", { zh: "石英冷却器", ru: "Кварцевый охладитель", pt: "Resfriador à Quartzo", de: "Quarzkühler" });
-Translation.addTranslation("Must be adjacent to at least one active moderator block.", { zh: "必须接触至少一个有效的减速剂方块.", ru: "Должен коснуться хотя бы одного активного блока модератора.", pt: "Deve tocar ao menos um bloco de grafite ativo.", de: "Muss mindestens einen aktiven Moderatorblock berühren." });
-Translation.addTranslation("Gold Cooler", { zh: "金冷却器", ru: "Золотой охладитель", pt: "Resfriador à Ouro", de: "Goldkühler" });
-Translation.addTranslation("Must be adjacent to at least one valid Water Cooler and one valid Redstone Cooler.", { zh: "必须接触至少一个水冷器和一个红石冷却器.", ru: "Должен коснуться хотя бы одного активного водяного охладителя и одного активного охладителя редстоуна.", pt: "Deve tocar ao menos um resfriador à água ativo, e um resfriador à redstone.", de: "Muss mindestens einen aktiven Wasserkühler und einen aktiven Redstonekühler berühren." });
-Translation.addTranslation("Glowstone Cooler", { zh: "萤石冷却器", ru: "Охладитель из светопыли", pt: "Resfriador à Pedra Luminosa", de: "Glowstonekühler" });
-Translation.addTranslation("Must be adjacent to at least two active moderator blocks.", { zh: "必须接触至少两个有效的减速剂方块.", ru: "Должен касаться как минимум двух активных блоков модератора.", pt: "Deve tocar ao menos dois blocos de grafite ativos.", de: "Muss mindestens zwei aktive Moderatorblöcke berühren." });
-Translation.addTranslation("Lapis Cooler", { zh: "青金石冷却器", ru: "Лазуритовый охладитель", pt: "Resfriador à Lápis-Lazúli", de: "Lapislazulikühler" });
-Translation.addTranslation("Must be adjacent to at least one Reactor Cell and one Reactor Casing.", { zh: "必须接触至少一个反应堆单元和一个反应堆外壳.", ru: "Должен коснуться хотя бы одной ячейки реактора и одного корпуса реактора.", pt: "Deve tocar ao menos uma célula de reator e uma estrutura de reator.", de: "Muss mindestens eine Reaktorzelle und ein Reaktorgehäuse berühren." });
-Translation.addTranslation("Diamond Cooler", { zh: "钻石冷却器", ru: "Алмазный охладитель", pt: "Resfriador à Diamante", de: "Diamantkühler" });
-Translation.addTranslation("Must be adjacent to at least one valid Water Cooler and one valid Quartz Cooler.", { zh: "必须接触至少两个水冷器和至少一个石英冷却器.", ru: "Должен коснуться как минимум двух активных водяных охладителей и одного активного кварцевого охладителя.", pt: "Deve tocar ao menos quatro resfriadores à água que estejam no mesmo nível.", de: "Muss mindestens zwei aktive Wasserkühler und einen aktiven Quarzkühler berühren." });
-Translation.addTranslation("Liquid Helium Cooler", { zh: "液氦冷却器", ru: "Жидкий гелиевый охладитель", pt: "Resfriador à Hélio Líquido", de: "Flüssigheliumkühler" });
-Translation.addTranslation("Must be adjacent to exactly one valid Redstone Cooler and at least one Reactor Casing.", { zh: "必须接触恰好一个红石冷却器和至少一个反应堆外壳.", ru: "Необходимо коснуться только одного активного охладителя редстоуна и, по крайней мере, одного корпуса реактора.", pt: "Deve tocar ao menos um resfriador à quartzo ativo e uma estrutura de reator.", de: "Muss genau einen aktiven Redstonekühler und mindestens ein Reaktorgehäuse berühren." });
-Translation.addTranslation("Enderium Cooler", { zh: "末影冷却器", ru: "Эндериумовый охладитель", pt: "Resfriador à Endério", de: "Enderiumkühler" });
-Translation.addTranslation("Must be adjacent to exactly three Reactor Casings at exactly one vertex.", { zh: "必须接触三个反应堆外壳.", ru: "Должно касаться ровно трех корпусов реакторов ровно на одну вершину.", pt: "Deve tocar ao menos três estruturas de reator.", de: "Muss genau 3 Reaktorgehäuse in einer Ecke berühren." });
-Translation.addTranslation("Cryotheum Cooler", { zh: "凛冰冷却器", ru: "Криотеумовый охладитель", pt: "Resfriador à Crióteum", de: "Kryotheumkühler" });
-Translation.addTranslation("Must be adjacent to at least two Reactor Cells.", { zh: "必须接触至少两个反应堆单元.", ru: "Должен касаться, по крайней мере, двух реакторных ячеек.", pt: "Deve tocar ao menos duas células de reator.", de: "Muss mindestens zwei Reaktorzellen berühren." });
-Translation.addTranslation("Iron Cooler", { zh: "铁冷却器", ru: "Железный охладитель", pt: "Resfriador de Ferro", de: "Eisenkühler" });
-Translation.addTranslation("Must be adjacent to at least one valid Gold Cooler.", { zh: "必须接触至少一个金冷却器.", ru: "Должен коснуться хотя бы одного активного золотого охладителя.", pt: "Deve tocar ao menos um resfriador à ouro ativo.", de: "Muss mindestens einen aktiven Goldkühler berühren." });
-Translation.addTranslation("Emerald Cooler", { zh: "绿宝石冷却器", ru: "Изумрудный охладитель", pt: "Resfriador de Esmeralda", de: "Smaragdkühler" });
-Translation.addTranslation("Must be adjacent to at least one active moderator block and one Reactor Cell.", { zh: "必须接触至少一个有效的减速剂方块和一个反应堆单元.", ru: "Необходимо коснуться хотя бы одного активного блока модератора и одной ячейки реактора.", pt: "Deve tocar ao menos um bloco de grafite ativo e uma célula de reactor.", de: "Muss mindestens einen aktiven Moderatorblock und eine Reaktorzelle berühren." });
-Translation.addTranslation("Copper Cooler", { zh: "铜冷却器", ru: "Медный охладитель", pt: "Resfriador de Cobre", de: "Kupferkühler" });
-Translation.addTranslation("Must be adjacent to at least one valid Glowstone Cooler.", { zh: "必须接触至少一个萤石冷却器.", ru: "Необходимо коснуться хотя бы одного активного охладителя из светопыли.", pt: "Deve tocar ao menos um resfriador à pedra luminosa ativo.", de: "Muss mindestens einen aktiven Glowstonekühler berühren." });
-Translation.addTranslation("Tin Cooler", { zh: "锡冷却器", ru: "Оловянный охладитель", pt: "Resfriador de Estanho", de: "Zinnkühler" });
-Translation.addTranslation("Must be adjacent to at least two valid Lapis Coolers along a common axis.", { zh: "必须在两个青金石冷却器之间.", ru: "Должна быть по крайней мере между двумя активными лазуритовыми охладителями по одной оси.", pt: "Deve estar ao menos entre dois resfriadores à Lápis-Lazúli ativos, com um no lado oposto do outro.", de: "Muss mindestens zwischen zwei aktiven Lapislazulikühlern auf der selben Achse sein." });
-Translation.addTranslation("Magnesium Cooler", { zh: "镁冷却器", ru: "Магниевый охладитель", pt: "Resfriador de Magnésio", de: "Magnesiumkühler" });
-Translation.addTranslation("Must be adjacent to at least one Reactor Casing and one active moderator block.", { zh: "必须接触至少一个反应堆外壳和一个减速剂方块.", ru: "Необходимо коснуться хотя бы одного корпуса реактора и одного активного блока модератора.", pt: "Deve tocar ao menos um bloco de estrutura de reator e um resfriador à Hélio Líquido ativo.", de: "Muss mindestens ein Reaktorgehäuse und einen aktiven Moderatorblock berühren." });
-
-
-// "Cooling rate: " + coolerData.cooling + "H/t"
-Translation.addTranslation("Cooling Rate:", { zh: "冷却速率：", ru: "Скорость охлаждения:", fr: "Vitesse de refroidissement:" });
-// coolerData.description
-
-
-Translation.addTranslation("RTGs", { ru: "РИТЭГи" });
-Translation.addTranslation("Uranium RTG", { zh: "铀放射性热电发电机", ru: "Урановый РИТЭГ", pt: "GTR de Urânio", fr: "GTR à uranium", de: "Uran RTG" });
-Translation.addTranslation("Plutonium RTG", { zh: "钚放射性热电发电机", ru: "Плутониевый РИТЭГ", pt: "GTR de Plutônio", fr: "GTR à plutonium", de: "Plutonium RTG" });
-Translation.addTranslation("Americium RTG", { zh: "镅放射性热电发电机", ru: "Америциевый РИТЭГ", pt: "GTR de Amerício", fr: "GTR à américium", de: "Americium RTG" });
-Translation.addTranslation("Californium RTG", { zh: "锎放射性热电发电机", ru: "Калифорниевый РИТЭГ", pt: "GTR de Califórnio", fr: "GTR à californium", de: "Californium RTG" });
-
-
-Translation.addTranslation("Solar Panels", { ru: "Солнечные панели" });
-Translation.addTranslation("Basic Solar Panel", { zh: "基础太阳能电池板", ru: "Базовая солнечная панель", pt: "Painel Solar Básico", fr: "Panneau solaire basique", de: "Einfaches Solarpanel" });
-Translation.addTranslation("Advanced Solar Panel", { zh: "高级太阳能电池板", ru: "Расширенная солнечная панель", fr: "Panneau solaire avancé", de: "Fortgeschrittenes Solarpanel" });
-Translation.addTranslation("DU Solar Panel", { zh: "贫铀太阳能电池板", ru: "ДУ солнечная панель", fr: "Panneau solaire DU", de: "DU Solarpanel" });
-Translation.addTranslation("Elite Solar Panel", { zh: "精英太阳能电池板", ru: "Элитная солнечная панель", fr: "Panneau solaire élite", de: "Elite Solarpanel" });
-
-
-Translation.addTranslation("Item/Fluid Generators", { ru: "Предметные/жидкостные генераторы" });
-Translation.addTranslation("Cobblestone Generator", { zh: "造石机", ru: "Генератор булыжника", pt: "Gerador de Pedregulho", fr: "Générateur de pierres", de: "Bruchsteingenerator" });
-Translation.addTranslation("Compact Cobblestone Generator", { zh: "压缩造石机", ru: "Компактный генератор булыжника", pt: "Gerador de Pedregulho Compacto", fr: "Générateur de pierres compact", de: "Kompakter Bruchsteingenerator" });
-Translation.addTranslation("Dense Cobblestone Generator", { zh: "致密造石机", ru: "Плотный генератор булыжника", pt: "Gerador de Pedregulho Denso", fr: "Générateur de pierres dense", de: "Dichter Bruchsteingenerator" });
-Translation.addTranslation("Infinite Water Source", { zh: "无限水源", ru: "Бесконечный источник воды", pt: "Bloco de Água Infinita", fr: "Source d'eau infinie", de: "Unendliche Wasserquelle" });
-Translation.addTranslation("Compact Infinite Water Source", { zh: "压缩无限水源", ru: "Компактный бесконечный источник воды", pt: "Bloco de Água Infinita Compacto", fr: "Source d'eau infinie compacte", de: "Kompakte unendliche Wasserquelle" });
-Translation.addTranslation("Dense Infinite Water Source", { zh: "致密无限水源", ru: "Плотный бесконечный источник воды", pt: "Bloco de Água Infinita Denso", fr: "Source d'eau infinie dense", de: "Dichte unendliche Wasserquelle" });
-Translation.addTranslation("Helium Collector", { zh: "氦收集器", ru: "Гелиевый сборщик", pt: "Coletor de Hélio", de: "Heliumsammler" });
-Translation.addTranslation("Compact Helium Collector", { zh: "压缩氦收集器", ru: "Компактный сборщик гелия", pt: "Coletor de Hélio Compacto", de: "Kompakter Heliumsammler" });
-Translation.addTranslation("Dense Helium Collector", { zh: "致密氦收集器", ru: "Плотный сборщик гелия", pt: "Coletor de Hélio Denso", de: "Dichter Heliumsammler" });
-Translation.addTranslation("Nitrogen Collector", { zh: "氮收集器", ru: "Азотный сборщик", pt: "Coletor de Nitrogênio", fr: "Collecteur d'azote", de: "Stickstoffsammler" });
-Translation.addTranslation("Compact Nitrogen Collector", { zh: "压缩氮收集器", ru: "Компактный сборщик азота", pt: "Coletor de Nitrogênio Compacto", fr: "Collecteur d'azote compacte", de: "Kompakter Stickstoffsammler" });
-Translation.addTranslation("Dense Nitrogen Collector", { zh: "致密氮收集器", ru: "Плотный сборщик азота", pt: "Coletor de Nitrogênio Denso", fr: "Collecteur d'azote dense", de: "Dichter Stickstoffsammler" });
-
-
-Translation.addTranslation("Nuclear Furnace", { zh: "核熔炉", ru: "Ядерная печь", fr: "Four nucléaire" });
-
-
 Translation.addTranslation("Ores", { ru: "Руды" });
 Translation.addTranslation("Copper Ore", { zh: "铜矿石", ru: "Медная руда", pt: "Minério de Cobre", fr: "Minerai de cuivre", de: "Kupfererz" });
 Translation.addTranslation("Tin Ore", { zh: "锡矿石", ru: "Оловянная руда", pt: "Minério de Estanho", fr: "Minerai d'étain", de: "Zinnerz" });
@@ -152,12 +69,138 @@ Translation.addTranslation("Lithium Ore", { zh: "锂矿石", ru: "Литиева
 Translation.addTranslation("Magnesium Ore", { zh: "镁矿石", ru: "Магниевая руда", pt: "Minério de Magnésio", fr: "Minerai de magnésium", de: "Magnesiumerz" });
 
 
-Translation.addTranslation("Fission Cells", { ru: "Термоядерные капсулы" });
-Translation.addTranslation("Empty Cell", { ru: "Пустая капсула" });
-Translation.addTranslation("Water Cell", { ru: "Капсула с водой" });
-Translation.addTranslation("Lava Cell", { ru: "Капсула с лавой" });
-Translation.addTranslation("Milk Cell", { ru: "Капсула с молоком" });
-// (16000 - item.data) + " mB"
+Translation.addTranslation("Metal Blocks", { ru: "Металлические блоки" });
+Translation.addTranslation("Copper Block", { zh: "铜块", ru: "Медный блок", pt: "Bloco de Cobre", fr: "Bloc de cuivre", de: "Kupferblock" });
+Translation.addTranslation("Tin Block", { zh: "锡块", ru: "Оловянный блок", pt: "Bloco de Estanho", fr: "Bloc d'étain", de: "Zinnblock" });
+Translation.addTranslation("Lead Block", { zh: "铅块", ru: "Свинцовый блок", pt: "Bloco de Chumbo", fr: "Bloc de plomb", de: "Bleiblock" });
+Translation.addTranslation("Thorium Block", { zh: "钍块", ru: "Ториевый блок", pt: "Bloco de Tório", fr: "Bloc de thorium", de: "Thoriumblock" });
+Translation.addTranslation("Uranium Block", { zh: "铀块", ru: "Урановый блок", pt: "Bloco de Urânio", fr: "Bloc d'uranium", de: "Uranblock" });
+Translation.addTranslation("Boron Block", { zh: "硼块", ru: "Борный блок", pt: "Bloco de Boro", fr: "Bloc de bore", de: "Borblock" });
+Translation.addTranslation("Lithium Block", { zh: "锂块", ru: "Литиевый блок", pt: "Bloco de Lítio", fr: "Bloc de lithium", de: "Lithiumblock" });
+Translation.addTranslation("Magnesium Block", { zh: "镁块", ru: "Магниевый блок", pt: "Bloco de Magnésio", fr: "Bloc de magnésium", de: "Magnesiumblock" });
+Translation.addTranslation("Graphite Block", { zh: "石墨块", ru: "Графитовый блок", pt: "Bloco de Grafite", fr: "Bloc de graphite", de: "Graphitblock" });
+Translation.addTranslation("Beryllium Block", { zh: "铍块", ru: "Бериллиевый блок", pt: "Bloco de Berilo", fr: "Bloc de béryllium", de: "Berylliumblock" });
+Translation.addTranslation("Zirconium Block", { zh: "锆块", ru: "Циркониевый блок", pt: "Bloco de Zircônio", fr: "Bloc de zirconium", de: "Zirkoniumblock" });
+Translation.addTranslation("Manganese Block", { zh: "锰块", ru: "Марганцевый блок", fr: "Bloc de manganèse" });
+Translation.addTranslation("Aluminum Block", { zh: "铝块", ru: "Алюминиевый блок", fr: "Bloc d'aluminium" });
+Translation.addTranslation("Silver Block", { zh: "银块", ru: "Серебряный блок", fr: "Bloc d'argent" });
+Translation.addTranslation("Thorium-230 Block", { zh: "贫钍块", ru: "Обеднённый блок тория", pt: "Bloco de Tório Esgotado", de: "Erschöpfter Thoriumblock" });
+Translation.addTranslation("Uranium-238 Block", { zh: "铀-238 块", ru: "Блок урана-238", fr: "Bloc d'uranium 238" });
+Translation.addTranslation("Neptunium-237 Block", { zh: "镎-237 块", ru: "Блок нептуния-237", fr: "Bloc de neptunium 237" });
+Translation.addTranslation("Plutonium-242 Block", { zh: "钚-242 块", ru: "Блок плутония-242", fr: "Bloc de plutonium 242" });
+Translation.addTranslation("Americium-243 Block", { zh: "镅-243 块", ru: "Блок америция-243", fr: "Bloc d'américium 243" });
+Translation.addTranslation("Curium-246 Block", { zh: "锔-246 块", ru: "Блок кюрия-246", fr: "Bloc de curium 246" });
+Translation.addTranslation("Berkelium-247 Block", { zh: "锫-247 块", ru: "Блок беркелия-247", fr: "Bloc de berkélium 247" });
+Translation.addTranslation("Californium-252 Block", { zh: "锎-252 块", ru: "Блок калифорния-252", fr: "Bloc de californium 252" });
+
+
+Translation.addTranslation("Ingots", { ru: "Слитки" });
+Translation.addTranslation("Copper Ingot", { zh: "铜锭", ru: "Медный слиток", pt: "Lingote de Cobre", fr: "Lingot de cuivre", de: "Kupferbarren" });
+Translation.addTranslation("Tin Ingot", { zh: "锡锭", ru: "Оловянный слиток", pt: "Lingote de Estanho", fr: "Lingot d'étain", de: "Zinnbarren" });
+Translation.addTranslation("Lead Ingot", { zh: "铅锭", ru: "Свинцовый слиток", pt: "Lingote de Chumbo", fr: "Lingot de plomb", de: "Bleibarren" });
+Translation.addTranslation("Thorium Ingot", { zh: "钍锭", ru: "Ториевый слиток", pt: "Lingote de Tório", fr: "Lingot de thorium", de: "Thoriumbarren" });
+Translation.addTranslation("Uranium Ingot", { zh: "铀锭", ru: "Урановый слиток", pt: "Lingote de Urânio", fr: "Lingot d'uranium", de: "Uranbarren" });
+Translation.addTranslation("Boron Ingot", { zh: "硼锭", ru: "Борный слиток", pt: "Lingote de Boro", fr: "Lingot de bore", de: "Borbarren" });
+Translation.addTranslation("Lithium Ingot", { zh: "锂锭", ru: "Литиевый слиток", pt: "Lingote de Lítio", fr: "Lingot de lithium", de: "Lithiumbarren" });
+Translation.addTranslation("Magnesium Ingot", { zh: "镁锭", ru: "Магниевый слиток", pt: "Lingote de Magnésio", fr: "Lingot de magnésium", de: "Magnesiumbarren" });
+Translation.addTranslation("Graphite Ingot", { zh: "石墨锭", ru: "Графитовый слиток", pt: "Lingote de Grafite", fr: "Lingot de graphite", de: "Graphitbarren" });
+Translation.addTranslation("Beryllium Ingot", { zh: "铍锭", ru: "Бериллиевый слиток", pt: "Lingote de Berilo", fr: "Lingot de béryllium", de: "Berylliumbarren" });
+Translation.addTranslation("Zirconium Ingot", { zh: "锆锭", ru: "Циркониевый слиток", pt: "Lingote de Zircônio", fr: "Lingot de zirconium", de: "Zirkoniumbarren" });
+Translation.addTranslation("Manganese Ingot", { zh: "锰锭", ru: "Марганцевый слиток", fr: "Lingot de manganèse" });
+Translation.addTranslation("Aluminum Ingot", { zh: "铝锭", ru: "Алюминиевый слиток", fr: "Lingot d'aluminium" });
+Translation.addTranslation("Silver Ingot", { zh: "银锭", ru: "Серебряный слиток", fr: "Lingot d'argent" });
+Translation.addTranslation("Manganese Oxide Ingot", { zh: "氧化锰锭", ru: "Слиток оксида марганца", fr: "Lingot d'oxyde de manganèse" });
+Translation.addTranslation("Manganese Dioxide Ingot", { zh: "二氧化锰锭", ru: "Слиток диоксида марганца", fr: "Lingot de dioxyde de manganèse" });
+Translation.addTranslation("Bronze Ingot", { zh: "青铜锭", ru: "Бронзовый сплав", pt: "Liga de Bronze", fr: "Lingot de bronze", de: "Bronzelegierung" });
+Translation.addTranslation("Tough Alloy", { zh: "高强合金", ru: "Прочный сплав", pt: "Liga Resistente", de: "Harte Legierung" });
+Translation.addTranslation("Hard Carbon Alloy", { zh: "硬碳合金", ru: "Твердый углерод", pt: "Liga de Carbono Endurecido", de: "Harte Kohlenstofflegierung" });
+Translation.addTranslation("Magnesium Diboride Alloy", { zh: "二硼化镁合金", ru: "Сплав диборида магния", pt: "Liga de Diboreto de Magnésio", de: "Magnesiumdiboridlegierung" });
+Translation.addTranslation("Lithium Manganese Dioxide Alloy", { zh: "锂锰氧化物合金", ru: "Сплав литий-марганцевого диоксида", pt: "Liga de Dióxido de Manganês de Lítio", de: "Lithiummangandioxidlegierung" });
+Translation.addTranslation("Steel Ingot", { zh: "钢锭", ru: "Стальной сплав", pt: "Liga de Aço", fr: "Lingot d'acier", de: "Stahlbarren" });
+Translation.addTranslation("Ferroboron Alloy", { zh: "硼铁合金", ru: "Ферроборонный сплав", pt: "Liga de Ferro-boro", de: "Ferroborlegierung" });
+Translation.addTranslation("Shibuichi Alloy", { zh: "朦胧银", ru: "Шибуичи сплав", pt: "Liga Shibuichi", de: "Shibuichilegierung" });
+Translation.addTranslation("Tin Silver Alloy", { zh: "锡银合金", ru: "Оловянно-серебряный сплав", pt: "Liga de Estanho Prateado", de: "Zinnsilberlegierung" });
+Translation.addTranslation("Lead Platinum Alloy", { zh: "铅铂合金", ru: "Свинцово-платиновый сплав", pt: "Liga de Platina com Chumbo", de: "Bleiplatinlegierung" });
+Translation.addTranslation("Extreme Alloy", { ru: "Экстремальный сплав", de: "Extreme Legierung" });
+Translation.addTranslation("Thermoconducting Alloy", { ru: "Термопроводящий сплав", de: "Wärmeleitende Legierung" });
+Translation.addTranslation("Zircaloy", { ru: "Цирконий" });
+Translation.addTranslation("Silicon Carbide Ingot", { zh: "碳化硅锭", ru: "Слиток карбида кремния", fr: "Lingot de carbure de silicium" });
+Translation.addTranslation("SiC-SiC Ceramic Matrix Composite", { ru: "Кремниево-кремниевый матричный композит" });
+Translation.addTranslation("HSLA Steel Ingot", { zh: "高强度低合金钢锭", ru: "Слиток стали HSLA", fr: "Lingot d'acier faiblement allié à haute résistance" });
+Translation.addTranslation("Enderium Ingot", { ru: "Слиток эндерия" });
+
+
+Translation.addTranslation("Dusts", { ru: "Пылинки" });
+Translation.addTranslation("Copper Dust", { zh: "铜粉", ru: "Медная пыль", pt: "Pó de Cobre", fr: "Poudre de cuivre", de: "Kupferstaub" });
+Translation.addTranslation("Tin Dust", { zh: "锡粉", ru: "Оловянная пыль", pt: "Pó de Estanho", fr: "Poudre d'étain", de: "Zinnstaub" });
+Translation.addTranslation("Lead Dust", { zh: "铅粉", ru: "Свинцовая пыль", pt: "Pó de Chumbo", fr: "Poudre de plomb", de: "Bleistaub" });
+Translation.addTranslation("Tiny Pile of Lead Dust", { zh: "小撮铅粉", ru: "Крошечная кучка свинцовой пыли", pt: "Pequena Pilha de Pó de Chumbo", de: "Tiny Pile of Lead Dust" });
+Translation.addTranslation("Thorium Dust", { zh: "钍粉", ru: "Ториевая пыль", pt: "Pó de Tório", fr: "Poudre de thorium", de: "Thoriumstaub" });
+Translation.addTranslation("Uranium Dust", { zh: "铀粉", ru: "Урановая пыль", pt: "Pó de Urânio", fr: "Poudre d'uranium", de: "Uranstaub" });
+Translation.addTranslation("Boron Dust", { zh: "硼粉", ru: "Борная пыль", pt: "Pó de Boro", fr: "Poudre de bore", de: "Borstaub" });
+Translation.addTranslation("Lithium Dust", { zh: "锂粉", ru: "Литиевая пыль", pt: "Pó de Lítio", fr: "Poudre de lithium", de: "Lithiumstaub" });
+Translation.addTranslation("Magnesium Dust", { zh: "镁粉", ru: "Магниевая пыль", pt: "Pó de Magnésio", fr: "Poudre de magnésium", de: "Magnesiumstaub" });
+Translation.addTranslation("Graphite Dust", { zh: "石墨粉", ru: "Графитовая пыль", pt: "Pó de Grafite", fr: "Poudre de graphite", de: "Graphitstaub" });
+Translation.addTranslation("Beryllium Dust", { zh: "铍粉", ru: "Бериллиевая пыль", pt: "Pó de Berilo", fr: "Poudre de béryllium", de: "Berylliumstaub" });
+Translation.addTranslation("Zirconium Dust", { zh: "锆粉", ru: "Циркониевая пыль", pt: "Pó de Zircônio", fr: "Poudre de zirconium", de: "Zirkoniumstaub" });
+Translation.addTranslation("Manganese Dust", { zh: "锰粉", ru: "Марганцевая пыль", fr: "Poudre de manganèse" });
+Translation.addTranslation("Aluminum Dust", { zh: "铝粉", ru: "Алюминиевая пыль", fr: "Poudre d'aluminium" });
+Translation.addTranslation("Silver Dust", { zh: "银粉", ru: "Серебряная пыль", fr: "Poudre d'argent" });
+Translation.addTranslation("Manganese Oxide Dust", { zh: "氧化锰粉", ru: "Пыль оксида марганца", fr: "Poudre d'oxyde de manganèse" });
+Translation.addTranslation("Manganese Dioxide Dust", { zh: "二氧化锰粉", ru: "Пыль диоксида марганца", fr: "Poudre de dioxyde de manganèse" });
+Translation.addTranslation("Crushed Diamond", { zh: "钻石粉末", ru: "Дроблёный алмаз", pt: "Diamante Moído", fr: "Diamant broyé", de: "Zerkleinerter Diamant" });
+Translation.addTranslation("Crushed Rhodochrosite", { zh: "菱锰粉末", ru: "Дроблёный родохрозит", pt: "Rodocrosita Moída", fr: "Rhodochrosite broyée", de: "Zerkleinerter Rhodochrosit" });
+Translation.addTranslation("Crushed Quartz", { zh: "石英粉末", ru: "Дроблёный кварц", pt: "Quartzo Moído", fr: "Quartz broyé", de: "Zerkleinerter Quarz" });
+Translation.addTranslation("Crushed Obsidian", { zh: "黑曜石粉末", ru: "Дроблёный обсидиан", pt: "Obsidiana Moída", fr: "Obsidienne broyée", de: "Zerkleinerter Quarz" });
+Translation.addTranslation("Hexagonal Boron Nitride", { zh: "六方氮化硼", ru: "Шестиугольный нитрид бора", pt: "Nitrido de Boro Amorfo", fr: "Nitrure de bore hexagonale", de: "Hexagonales Bornitrid" });
+Translation.addTranslation("Crushed Fluorite", { zh: "氟石粉末", ru: "Дроблёный флюорит", pt: "Fluorita Moída", fr: "Fluorite broyée", de: "Zerkleinerter Fluorid" });
+Translation.addTranslation("Sulfur", { zh: "硫磺", ru: "Сера", pt: "Enxofre", fr: "Soufre", de: "Schwefel" });
+Translation.addTranslation("Crushed Coal", { zh: "煤炭粉末", ru: "Дроблёный уголь", fr: "Charbon broyé", de: "Zerkleinerte Kohle" });
+Translation.addTranslation("Crushed Villiaumite", { zh: "氟盐粉末", ru: "Дроблёный виллиомит", fr: "Villiaumite broyée", de: "Zerkleinerter Villiaumit" });
+Translation.addTranslation("Crushed Carobbiite", { zh: "方氟钾石粉末", ru: "Дроблёный кароббиит", fr: "Carobbiite broyée", de: "Zerkleinerter Carobbiit" });
+Translation.addTranslation("Crushed Arsenic", { zh: "砷粉末", ru: "Дроблёный мышьяк", fr: "Arsenic broyé", de: "Zerkleinertes Arsenik" });
+Translation.addTranslation("Crushed End Stone", { zh: "末地石粉末", ru: "Дроблёный эндерняк", fr: "Pierre de l'end broyée" });
+
+
+Translation.addTranslation("Gems", { ru: "Драгоценности" });
+Translation.addTranslation("Rhodochrosite", { zh: "菱锰", ru: "Родохрозит", pt: "Rodocrosita", fr: "Rhodochrosite", de: "Rhodochrosit" });
+Translation.addTranslation("Cubic Boron Nitride", { zh: "立方氮化硼", ru: "Кубический нитрид бора", pt: "Nitrido de Boro Cúbico", fr: "Nitrure de bore cubique", de: "Kubisches Bornitrid" });
+Translation.addTranslation("Fluorite", { zh: "氟石", ru: "Флюорит", pt: "Fluorita", fr: "Fluorite", de: "Fluorit" });
+Translation.addTranslation("Villiaumite", { zh: "氟盐", ru: "Виллиомит", fr: "Villiaumite", de: "Villiaumit" });
+Translation.addTranslation("Carobbiite", { zh: "方氟钾石", ru: "Кароббиит", fr: "Carobbiite", de: "Carobbiit" });
+Translation.addTranslation("Boron Arsenide", { zh: "砷化硼", ru: "Арсенид бора", fr: "Arséniure de bore", de: "Borarsenid" });
+Translation.addTranslation("Silicon", { zh: "硅", ru: "Кремний", fr: "Silicium" });
+
+
+Translation.addTranslation("Compounds", { ru: "Соединения" });
+Translation.addTranslation("Calcium Sulfate", { zh: "硫酸钙", ru: "Сульфат кальция", pt: "Sulfato de Cálcio", fr: "Sulfate de calcium", de: "Calciumsulfat" });
+Translation.addTranslation("Crystal Binder", { zh: "晶体粘合剂", ru: "Кристаллический связующий элемент", pt: "Cristal Isolante", fr: "Liant de cristal", de: "Kristallbinder" });
+Translation.addTranslation("Energetic Blend", { zh: "充能混合物", ru: "Энергетическая смесь", fr: "Mélange énergétique", de: "Energische Mischung" });
+Translation.addTranslation("Sodium Fluoride", { zh: "氟化钠", ru: "Фторид натрия", fr: "Fluorure de sodium", de: "Natriumfluorid" });
+Translation.addTranslation("Potassium Fluoride", { zh: "氟化钾", ru: "Фторид калия", fr: "Fluorure de potassium", de: "Kaliumfluorid" });
+Translation.addTranslation("Sodium Hydroxide", { zh: "氢氧化钠", ru: "Гидроксид натрия", fr: "Hydroxyde de sodium", de: "Natriumhydroxid" });
+Translation.addTranslation("Potassium Hydroxide", { zh: "氢氧化钾", ru: "Гидроксид калия", fr: "Hydroxyde de potassium", de: "Kaliumhydroxid" });
+Translation.addTranslation("Borax", { zh: "硼砂", ru: "Бура", fr: "Borax" });
+Translation.addTranslation("Dimensional Blend", { zh: "维度混合物", ru: "Размерная смесь", fr: "Mélange dimensionnel" });
+Translation.addTranslation("Carbon-Manganese Blend", { zh: "碳锰混合物", ru: "Углеродно-марганцевая смесь", fr: "Mélange de carbone et de manganèse" });
+Translation.addTranslation("Alugentum Dust", { zh: "银铝粉", ru: "Алюгентовая пыль", fr: "Poudre d'alugentum" });
+
+
+Translation.addTranslation("Basic Plating", { zh: "基础板", ru: "Базовая обшивка", pt: "Placa Básica", fr: "Placage basique", de: "Einfache Platte" });
+Translation.addTranslation("Advanced Plating", { zh: "高级板", ru: "Улучшенная обшивка", pt: "Placa Avançada", fr: "Placage avancé", de: "Fortgeschrittene Platte" });
+Translation.addTranslation("DU Plating", { zh: "贫铀板", ru: "ДУ обшивка", pt: "Placa de Urânio", fr: "Placage DU", de: "DU Platte" });
+Translation.addTranslation("Elite Plating", { zh: "精英板", ru: "Элитная обшивка", pt: "Placa Elite", fr: "Placage élite", de: "Eliteplatte" });
+Translation.addTranslation("Copper Solenoid", { zh: "铜螺线管", ru: "Медный соленоид", pt: "Solenóide de Cobre", fr: "Solénoïde en cuivre", de: "Kupfersolenoid" });
+Translation.addTranslation("Magnesium Diboride Solenoid", { zh: "二硼化镁螺线管", ru: "Соленоид из диборида магния", pt: "Solenóide de Diboreto de Magnésio", fr: "Solénoïde en diborure de magnésium", de: "Magnesiumdiboridsolenoid" });
+Translation.addTranslation("Bioplastic", { zh: "生物塑料", ru: "Биопластик", pt: "Bioplástico", fr: "Bioplastique", de: "Bioplastik" });
+Translation.addTranslation("Servomechanism", { zh: "伺服系统", ru: "Сервомеханизм", fr: "Servomécanisme", de: "Servomechanismus" });
+Translation.addTranslation("Electric Motor", { zh: "电动马达", ru: "Электродвигатель", fr: "Moteur électrique", de: "Elektromotor" });
+Translation.addTranslation("Linear Actuator", { zh: "线性执行器", ru: "Линейный привод", fr: "Actionneur linéaire", de: "Linearer Auslöser" });
+Translation.addTranslation("Lithium Ion Cell", { zh: "锂离子电池", ru: "Литий-ионная ячейка", fr: "Batterie lithium-ion", de: "Lithium-Ionen Akku" });
+
+Translation.addTranslation("Machine Chassis", { zh: "机器框架", ru: "Шасси машины", fr: "Chassis de machine", de: "Maschinengehäuse" });
+Translation.addTranslation("Empty Frame", { zh: "空框架", ru: "Пустая рамка", fr: "Cadre de machine vide", de: "Leerer Rahmen" });
+Translation.addTranslation("Steel Chassis", { zh: "钢框架", ru: "Стальная рамка", fr: "Chassis de machine en acier" });
 
 
 Translation.addTranslation("Fission Materials", { ru: "Термоядерные материалы" });
@@ -357,6 +400,109 @@ Translation.addTranslation("Molten Silver", { zh: "熔融银", ru: "Распла
 Translation.addTranslation("Molten Ender", { zh: "谐振熔融末影珍珠", ru: "Расплавленный эндер-жемчуг", fr: "Ender fondu", de: "Flüssiges Ender" });
 
 
+Translation.addTranslation("RTGs", { ru: "РИТЭГи" });
+Translation.addTranslation("Uranium RTG", { zh: "铀放射性热电发电机", ru: "Урановый РИТЭГ", pt: "GTR de Urânio", fr: "GTR à uranium", de: "Uran RTG" });
+Translation.addTranslation("Plutonium RTG", { zh: "钚放射性热电发电机", ru: "Плутониевый РИТЭГ", pt: "GTR de Plutônio", fr: "GTR à plutonium", de: "Plutonium RTG" });
+Translation.addTranslation("Americium RTG", { zh: "镅放射性热电发电机", ru: "Америциевый РИТЭГ", pt: "GTR de Amerício", fr: "GTR à américium", de: "Americium RTG" });
+Translation.addTranslation("Californium RTG", { zh: "锎放射性热电发电机", ru: "Калифорниевый РИТЭГ", pt: "GTR de Califórnio", fr: "GTR à californium", de: "Californium RTG" });
+
+
+Translation.addTranslation("Solar Panels", { ru: "Солнечные панели" });
+Translation.addTranslation("Basic Solar Panel", { zh: "基础太阳能电池板", ru: "Базовая солнечная панель", pt: "Painel Solar Básico", fr: "Panneau solaire basique", de: "Einfaches Solarpanel" });
+Translation.addTranslation("Advanced Solar Panel", { zh: "高级太阳能电池板", ru: "Расширенная солнечная панель", fr: "Panneau solaire avancé", de: "Fortgeschrittenes Solarpanel" });
+Translation.addTranslation("DU Solar Panel", { zh: "贫铀太阳能电池板", ru: "ДУ солнечная панель", fr: "Panneau solaire DU", de: "DU Solarpanel" });
+Translation.addTranslation("Elite Solar Panel", { zh: "精英太阳能电池板", ru: "Элитная солнечная панель", fr: "Panneau solaire élite", de: "Elite Solarpanel" });
+
+
+Translation.addTranslation("Item/Fluid Generators", { ru: "Предметные/жидкостные генераторы" });
+Translation.addTranslation("Cobblestone Generator", { zh: "造石机", ru: "Генератор булыжника", pt: "Gerador de Pedregulho", fr: "Générateur de pierres", de: "Bruchsteingenerator" });
+Translation.addTranslation("Compact Cobblestone Generator", { zh: "压缩造石机", ru: "Компактный генератор булыжника", pt: "Gerador de Pedregulho Compacto", fr: "Générateur de pierres compact", de: "Kompakter Bruchsteingenerator" });
+Translation.addTranslation("Dense Cobblestone Generator", { zh: "致密造石机", ru: "Плотный генератор булыжника", pt: "Gerador de Pedregulho Denso", fr: "Générateur de pierres dense", de: "Dichter Bruchsteingenerator" });
+Translation.addTranslation("Infinite Water Source", { zh: "无限水源", ru: "Бесконечный источник воды", pt: "Bloco de Água Infinita", fr: "Source d'eau infinie", de: "Unendliche Wasserquelle" });
+Translation.addTranslation("Compact Infinite Water Source", { zh: "压缩无限水源", ru: "Компактный бесконечный источник воды", pt: "Bloco de Água Infinita Compacto", fr: "Source d'eau infinie compacte", de: "Kompakte unendliche Wasserquelle" });
+Translation.addTranslation("Dense Infinite Water Source", { zh: "致密无限水源", ru: "Плотный бесконечный источник воды", pt: "Bloco de Água Infinita Denso", fr: "Source d'eau infinie dense", de: "Dichte unendliche Wasserquelle" });
+Translation.addTranslation("Helium Collector", { zh: "氦收集器", ru: "Гелиевый сборщик", pt: "Coletor de Hélio", de: "Heliumsammler" });
+Translation.addTranslation("Compact Helium Collector", { zh: "压缩氦收集器", ru: "Компактный сборщик гелия", pt: "Coletor de Hélio Compacto", de: "Kompakter Heliumsammler" });
+Translation.addTranslation("Dense Helium Collector", { zh: "致密氦收集器", ru: "Плотный сборщик гелия", pt: "Coletor de Hélio Denso", de: "Dichter Heliumsammler" });
+Translation.addTranslation("Nitrogen Collector", { zh: "氮收集器", ru: "Азотный сборщик", pt: "Coletor de Nitrogênio", fr: "Collecteur d'azote", de: "Stickstoffsammler" });
+Translation.addTranslation("Compact Nitrogen Collector", { zh: "压缩氮收集器", ru: "Компактный сборщик азота", pt: "Coletor de Nitrogênio Compacto", fr: "Collecteur d'azote compacte", de: "Kompakter Stickstoffsammler" });
+Translation.addTranslation("Dense Nitrogen Collector", { zh: "致密氮收集器", ru: "Плотный сборщик азота", pt: "Coletor de Nitrogênio Denso", fr: "Collecteur d'azote dense", de: "Dichter Stickstoffsammler" });
+
+
+Translation.addTranslation("Fission Coolers", { ru: "Термоядерные охладители" });
+Translation.addTranslation("Empty Cooler", { zh: "空的冷却器", ru: "Пустой охладитель", pt: "Resfriador Vazio", de: "Leerer Kühler" });
+Translation.addTranslation("Water Cooler", { zh: "水冷器", ru: "Водяной охладитель", pt: "Resfriador à Água", de: "Wasserkühler" });
+Translation.addTranslation("Must be adjacent to at least one Reactor Cell or active moderator block.", { zh: "必须接触至少一个反应单元或一个减速剂方块.", ru: "Должен коснуться хотя бы одной ячейки реактора или активного блока модератора.", pt: "Deve tocar ao menos uma estrutura de reator.", de: "Muss mindestens eine Reaktorzelle oder einen aktiven Moderatorblock berühren." });
+Translation.addTranslation("Redstone Cooler", { zh: "红石冷却器", ru: "Редстоуновый охладитель", pt: "Resfriador à Redstone", de: "Redstone Cooler" });
+Translation.addTranslation("Must be adjacent to at least one Reactor Cell.", { zh: "必须接触至少一个反应堆单元.", ru: "Необходимо коснуться хотя бы одной ячейки реактора.", pt: "Deve tocar ao menos uma célula de reator.", de: "Muss mindestens eine Reaktorzelle berühren." });
+Translation.addTranslation("Quartz Cooler", { zh: "石英冷却器", ru: "Кварцевый охладитель", pt: "Resfriador à Quartzo", de: "Quarzkühler" });
+Translation.addTranslation("Must be adjacent to at least one active moderator block.", { zh: "必须接触至少一个有效的减速剂方块.", ru: "Должен коснуться хотя бы одного активного блока модератора.", pt: "Deve tocar ao menos um bloco de grafite ativo.", de: "Muss mindestens einen aktiven Moderatorblock berühren." });
+Translation.addTranslation("Gold Cooler", { zh: "金冷却器", ru: "Золотой охладитель", pt: "Resfriador à Ouro", de: "Goldkühler" });
+Translation.addTranslation("Must be adjacent to at least one valid Water Cooler and one valid Redstone Cooler.", { zh: "必须接触至少一个水冷器和一个红石冷却器.", ru: "Должен коснуться хотя бы одного активного водяного охладителя и одного активного охладителя редстоуна.", pt: "Deve tocar ao menos um resfriador à água ativo, e um resfriador à redstone.", de: "Muss mindestens einen aktiven Wasserkühler und einen aktiven Redstonekühler berühren." });
+Translation.addTranslation("Glowstone Cooler", { zh: "萤石冷却器", ru: "Охладитель из светопыли", pt: "Resfriador à Pedra Luminosa", de: "Glowstonekühler" });
+Translation.addTranslation("Must be adjacent to at least two active moderator blocks.", { zh: "必须接触至少两个有效的减速剂方块.", ru: "Должен касаться как минимум двух активных блоков модератора.", pt: "Deve tocar ao menos dois blocos de grafite ativos.", de: "Muss mindestens zwei aktive Moderatorblöcke berühren." });
+Translation.addTranslation("Lapis Cooler", { zh: "青金石冷却器", ru: "Лазуритовый охладитель", pt: "Resfriador à Lápis-Lazúli", de: "Lapislazulikühler" });
+Translation.addTranslation("Must be adjacent to at least one Reactor Cell and one Reactor Casing.", { zh: "必须接触至少一个反应堆单元和一个反应堆外壳.", ru: "Должен коснуться хотя бы одной ячейки реактора и одного корпуса реактора.", pt: "Deve tocar ao menos uma célula de reator e uma estrutura de reator.", de: "Muss mindestens eine Reaktorzelle und ein Reaktorgehäuse berühren." });
+Translation.addTranslation("Diamond Cooler", { zh: "钻石冷却器", ru: "Алмазный охладитель", pt: "Resfriador à Diamante", de: "Diamantkühler" });
+Translation.addTranslation("Must be adjacent to at least one valid Water Cooler and one valid Quartz Cooler.", { zh: "必须接触至少两个水冷器和至少一个石英冷却器.", ru: "Должен коснуться как минимум двух активных водяных охладителей и одного активного кварцевого охладителя.", pt: "Deve tocar ao menos quatro resfriadores à água que estejam no mesmo nível.", de: "Muss mindestens zwei aktive Wasserkühler und einen aktiven Quarzkühler berühren." });
+Translation.addTranslation("Liquid Helium Cooler", { zh: "液氦冷却器", ru: "Жидкий гелиевый охладитель", pt: "Resfriador à Hélio Líquido", de: "Flüssigheliumkühler" });
+Translation.addTranslation("Must be adjacent to exactly one valid Redstone Cooler and at least one Reactor Casing.", { zh: "必须接触恰好一个红石冷却器和至少一个反应堆外壳.", ru: "Необходимо коснуться только одного активного охладителя редстоуна и, по крайней мере, одного корпуса реактора.", pt: "Deve tocar ao menos um resfriador à quartzo ativo e uma estrutura de reator.", de: "Muss genau einen aktiven Redstonekühler und mindestens ein Reaktorgehäuse berühren." });
+Translation.addTranslation("Enderium Cooler", { zh: "末影冷却器", ru: "Эндериумовый охладитель", pt: "Resfriador à Endério", de: "Enderiumkühler" });
+Translation.addTranslation("Must be adjacent to exactly three Reactor Casings at exactly one vertex.", { zh: "必须接触三个反应堆外壳.", ru: "Должно касаться ровно трех корпусов реакторов ровно на одну вершину.", pt: "Deve tocar ao menos três estruturas de reator.", de: "Muss genau 3 Reaktorgehäuse in einer Ecke berühren." });
+Translation.addTranslation("Cryotheum Cooler", { zh: "凛冰冷却器", ru: "Криотеумовый охладитель", pt: "Resfriador à Crióteum", de: "Kryotheumkühler" });
+Translation.addTranslation("Must be adjacent to at least two Reactor Cells.", { zh: "必须接触至少两个反应堆单元.", ru: "Должен касаться, по крайней мере, двух реакторных ячеек.", pt: "Deve tocar ao menos duas células de reator.", de: "Muss mindestens zwei Reaktorzellen berühren." });
+Translation.addTranslation("Iron Cooler", { zh: "铁冷却器", ru: "Железный охладитель", pt: "Resfriador de Ferro", de: "Eisenkühler" });
+Translation.addTranslation("Must be adjacent to at least one valid Gold Cooler.", { zh: "必须接触至少一个金冷却器.", ru: "Должен коснуться хотя бы одного активного золотого охладителя.", pt: "Deve tocar ao menos um resfriador à ouro ativo.", de: "Muss mindestens einen aktiven Goldkühler berühren." });
+Translation.addTranslation("Emerald Cooler", { zh: "绿宝石冷却器", ru: "Изумрудный охладитель", pt: "Resfriador de Esmeralda", de: "Smaragdkühler" });
+Translation.addTranslation("Must be adjacent to at least one active moderator block and one Reactor Cell.", { zh: "必须接触至少一个有效的减速剂方块和一个反应堆单元.", ru: "Необходимо коснуться хотя бы одного активного блока модератора и одной ячейки реактора.", pt: "Deve tocar ao menos um bloco de grafite ativo e uma célula de reactor.", de: "Muss mindestens einen aktiven Moderatorblock und eine Reaktorzelle berühren." });
+Translation.addTranslation("Copper Cooler", { zh: "铜冷却器", ru: "Медный охладитель", pt: "Resfriador de Cobre", de: "Kupferkühler" });
+Translation.addTranslation("Must be adjacent to at least one valid Glowstone Cooler.", { zh: "必须接触至少一个萤石冷却器.", ru: "Необходимо коснуться хотя бы одного активного охладителя из светопыли.", pt: "Deve tocar ao menos um resfriador à pedra luminosa ativo.", de: "Muss mindestens einen aktiven Glowstonekühler berühren." });
+Translation.addTranslation("Tin Cooler", { zh: "锡冷却器", ru: "Оловянный охладитель", pt: "Resfriador de Estanho", de: "Zinnkühler" });
+Translation.addTranslation("Must be adjacent to at least two valid Lapis Coolers along a common axis.", { zh: "必须在两个青金石冷却器之间.", ru: "Должна быть по крайней мере между двумя активными лазуритовыми охладителями по одной оси.", pt: "Deve estar ao menos entre dois resfriadores à Lápis-Lazúli ativos, com um no lado oposto do outro.", de: "Muss mindestens zwischen zwei aktiven Lapislazulikühlern auf der selben Achse sein." });
+Translation.addTranslation("Magnesium Cooler", { zh: "镁冷却器", ru: "Магниевый охладитель", pt: "Resfriador de Magnésio", de: "Magnesiumkühler" });
+Translation.addTranslation("Must be adjacent to at least one Reactor Casing and one active moderator block.", { zh: "必须接触至少一个反应堆外壳和一个减速剂方块.", ru: "Необходимо коснуться хотя бы одного корпуса реактора и одного активного блока модератора.", pt: "Deve tocar ao menos um bloco de estrutura de reator e um resfriador à Hélio Líquido ativo.", de: "Muss mindestens ein Reaktorgehäuse und einen aktiven Moderatorblock berühren." });
+
+
+Translation.addTranslation("Fission Reactor", { zh: "裂变反应堆", ru: "Реактор деления", pt: "Reator de Fissão", de: "Spaltungsreaktor" });
+
+Translation.addTranslation("Speed Upgrade", { zh: "速度升级", ru: "Обновление \"Скорость\"", pt: "Melhoria de Velocidade", fr: "Amélioration de vitesse", de: "Geschwindigkeitsupgrade" });
+Translation.addTranslation("Energy Upgrade", { zh: "能量升级", ru: "Обновление \"Энергия\"", fr: "Amélioration d'énergie" });
+Translation.addTranslation("Fission Reactor Casing", { zh: "裂变反应堆外壳", ru: "Корпус ядерного реактора", fr: "Caisson du réacteur à fission" });
+Translation.addTranslation("Transparent Fission Reactor Casing", { zh: "透明反应堆外壳", ru: "Прозрачный корпус реактора", pt: "Estrutura Transparente de Reator", de: "Transparentes Reaktorgehäuse" });
+Translation.addTranslation("Reactor Cell", { zh: "反应堆单元", ru: "Реакторная ячейка", pt: "Célula de Reator", de: "Reaktorzelle" });
+
+
+Translation.addTranslation("Decay Generator", { zh: "衰变产能器", ru: "Генератор распада", pt: "Gerador Apodrecedor", fr: "Générateur à désintégration", de: "Zerfallsgenerator" });
+Translation.addTranslation("Nuclear Furnace", { zh: "核熔炉", ru: "Ядерная печь", fr: "Four nucléaire" });
+Translation.addTranslation("Mean Lifetime: %s", { zh: "平均寿命：%s", ru: "Период полураспада: %s", fr: "Temps de vie moyen: %s" });
+Translation.addTranslation("Power Gen: %d RF/s", { zh: "产能：%dRF/s", ru: "Генерация энергии：%d RF/s", fr: "Génération d'énergie: %d RF/s" });
+
+
+Translation.addTranslation("Nuclear Furnace Fuel", { ru: "Термоядерное печное топливо" });
+Translation.addTranslation("Fuel", { ru: "Топливо", de: "Brennstoff" });
+Translation.addTranslation("(Smelts %d item)", { ru: "(Плавит %d предмет)" });
+Translation.addTranslation("(Smelts %d~ items)", { ru: "(Плавит %d~ предмета)" });
+Translation.addTranslation("(Smelts %d items)", { ru: "(Плавит %d предметов)" });
+
+
+Translation.addTranslation("Fission Controller", { zh: "裂变控制器", ru: "Контроллер деления", pt: "Controlador de Fissão", de: "Spaltungsregeler" });
+Translation.addTranslation("%dx%dx%d Fission Controller", { zh: "%dx%dx%d裂变控制器", ru: "Контроллер деления %dx%dx%d", pt: "%dx%dx%d Controlador de Fissão", de: "%dx%dx%d Spaltungsregeler" });
+// [this.networkData.getInt("statSizeX"), this.networkData.getInt("statSizeY"), this.networkData.getInt("statSizeZ")].join("x") + " Fission Reactor"
+// "Cells: " + status.cells
+Translation.addTranslation("Cells: %d", { zh: "单元数：%d", ru: "Ячейки: %d", pt: "Células: %d", de: "Zellen: %d" });
+// fuelData ? fuelData.name : "No Fuel"
+Translation.addTranslation("No Fuel", { zh: "没有燃料", ru: "Нет топлива", pt: "Sem Combustível", de: "Kein Brennstoff" });
+// status.power + " RF/t"
+// (status.cooling > 0 ? status.heat + " - " + status.cooling + " = " : "") + (status.heat - status.cooling) + " H/t"
+
+
+Translation.addTranslation("Fission Cells", { ru: "Термоядерные капсулы" });
+Translation.addTranslation("Empty Cell", { ru: "Пустая капсула" });
+Translation.addTranslation("Water Cell", { ru: "Капсула с водой" });
+Translation.addTranslation("Lava Cell", { ru: "Капсула с лавой" });
+Translation.addTranslation("Milk Cell", { ru: "Капсула с молоком" });
+
+
 Translation.addTranslation("Fission Fuels", { ru: "Термоядерное топливо" });
 Translation.addTranslation("TBU Fuel", { zh: "TBU燃料", ru: "Топливо TBU", pt: "Combustível TBU", de: "TBU Kernbrennstoff" });
 Translation.addTranslation("TBU Oxide Fuel", { zh: "氧化TBU燃料", ru: "Оксидное Топливо TBU", pt: "Óxido de Combustível TBU", de: "TBU Oxid Kernbrennstoff" });
@@ -462,151 +608,33 @@ Translation.addTranslation("Depleted LECf-251 Oxide Fuel", { zh: "枯竭低密�
 Translation.addTranslation("Depleted HECf-251 Fuel", { zh: "枯竭高密度锎-251燃料", ru: "Обеднённое топливо HECf-251 ", pt: "Haste de Combustível HECf-251 Esgotado", de: "Erschöpfter HECf-251 Kernbrennstoff" });
 Translation.addTranslation("Depleted HECf-251 Oxide Fuel", { zh: "枯竭高密度氧化锎-251燃料", ru: "Обеднённое оксидное топливо HECf-251", pt: "Haste de Combustível Óxido de HECf-251 Esgotado", de: "Erschöpfter HECf-251 Oxid Kernbrennstoff" });
 
-// m + "min"
-// s + "sec"
-// Base process time: ${FissionFuel.tickToString(fuelData.time)}
-Translation.addTranslation("Base Process Time:", { zh: "基础处理时间：", ru: "Базовое время процесса:", fr: "Temps de base du processus:" });
-// Base power: ${fuelData.power} RF/t
-Translation.addTranslation("Base Process Power:", { zh: "基础功率：", ru: "Базовое энергопотребление:", fr: "Énergie de base du processus:" });
-// Base heat gen: ${fuelData.heat} H/t
-Translation.addTranslation("Base Heat Gen:", { zh: "基础产热：", ru: "Базовое тепловыделение:", fr: "Génération de chaleur de base:" });
+
+Translation.addTranslation("Batteries", { ru: "Батарейки" });
+Translation.addTranslation("Basic Voltaic Pile", { zh: "基础伏打电堆", ru: "Базовая вольтаическая куча", pt: "Pilha Voltáica Básica (WIP)", fr: "Pile voltaïque basique", de: "Einfache voltaische Säule" });
+Translation.addTranslation("Advanced Voltaic Pile", { zh: "高级伏打电堆", ru: "Расширенная вольтаическая куча", fr: "Pile voltaïque avancée" });
+Translation.addTranslation("DU Voltaic Pile", { zh: "贫铀伏打电堆", ru: "ДУ вольтаическая куча", fr: "Pile voltaïque DU" });
+Translation.addTranslation("Elite Voltaic Pile", { zh: "精英伏打电堆", ru: "Элитная вольтаическая куча", fr: "Pile voltaïque élite" });
+Translation.addTranslation("Basic Lithium Ion Battery", { zh: "基础锂离子电池块", ru: "Базовая литий-ионная батарея", pt: "Bateria Básica de Íon de Lítio (WIP)", fr: "Accumulateur lithium-ion basique", de: "Einfache Lithium Ionen Batterie" });
+Translation.addTranslation("Advanced Lithium Ion Battery", { zh: "高级锂离子电池块", ru: "Расширенная литий-ионная батарея", fr: "Accumulateur lithium-ion avancé" });
+Translation.addTranslation("DU Lithium Ion Battery", { zh: "贫铀锂离子电池块", ru: "ДУ литий-ионная батарея", fr: "Accumulateur lithium-ion DU" });
+Translation.addTranslation("Elite Lithium Ion Battery", { zh: "精英锂离子电池块", ru: "Элитная литий-ионная батарея", fr: "Accumulateur lithium-ion élite" });
 
 
-Translation.addTranslation("Speed Upgrade", { zh: "速度升级", ru: "Обновление \"Скорость\"", pt: "Melhoria de Velocidade", fr: "Amélioration de vitesse", de: "Geschwindigkeitsupgrade" });
-Translation.addTranslation("Energy Upgrade", { zh: "能量升级", ru: "Обновление \"Энергия\"", fr: "Amélioration d'énergie" });
-Translation.addTranslation("Fission Reactor Casing", { zh: "裂变反应堆外壳", ru: "Корпус ядерного реактора", fr: "Caisson du réacteur à fission" });
-Translation.addTranslation("Transparent Fission Reactor Casing", { zh: "透明反应堆外壳", ru: "Прозрачный корпус реактора", pt: "Estrutura Transparente de Reator", de: "Transparentes Reaktorgehäuse" });
-Translation.addTranslation("Reactor Cell", { zh: "反应堆单元", ru: "Реакторная ячейка", pt: "Célula de Reator", de: "Reaktorzelle" });
+Translation.addTranslation("RF: Input", { ru: "RF: Ввод" });
+Translation.addTranslation("RF: Output", { ru: "RF: Вывод" });
+Translation.addTranslation("RF: None", { ru: "RF: Ничего" });
 
+Translation.addTranslation("Base Depletion Time: %s", { zh: "基础衰竭时间：%s", ru: "Базовое время отработки: %s", fr: "Temps de déterioration de base: %s" });
+Translation.addTranslation("Base Power Gen: %d RF/t", { ru: "Базовая генерация энергии: %d RF/t" });
+Translation.addTranslation("Base Heat Gen: %d H/t", { zh: "基础产热：%dH/t", ru: "Базовое тепловыделение: %d H/t", fr: "Génération de chaleur de base: %d H/t" });
+Translation.addTranslation("Base Process Time: %s", { zh: "基础处理时间：%s", ru: "Базовое время процесса: %s", fr: "Temps de base du processus: %s" });
+Translation.addTranslation("Base Process Power: %d RF/t", { zh: "基础功率：%dRF/t", ru: "Базовое энергопотребление: %d RF/t", fr: "Énergie de base du processus: %d RF/t" });
+Translation.addTranslation("Energy Stored: %d / %d", { zh: "储能：%d/%d", ru: "Запас энергии: %d / %d", fr: "Energie enmagasinée: %d / %d" });
+Translation.addTranslation("Cooling Rate: %d H/t", { zh: "冷却速率：%dH/t", ru: "Скорость охлаждения: %d H/t", fr: "Vitesse de refroidissement: %d H/t" });
 
-Translation.addTranslation("Metal Blocks", { ru: "Металлические блоки" });
-Translation.addTranslation("Copper Block", { zh: "铜块", ru: "Медный блок", pt: "Bloco de Cobre", fr: "Bloc de cuivre", de: "Kupferblock" });
-Translation.addTranslation("Tin Block", { zh: "锡块", ru: "Оловянный блок", pt: "Bloco de Estanho", fr: "Bloc d'étain", de: "Zinnblock" });
-Translation.addTranslation("Lead Block", { zh: "铅块", ru: "Свинцовый блок", pt: "Bloco de Chumbo", fr: "Bloc de plomb", de: "Bleiblock" });
-Translation.addTranslation("Thorium Block", { zh: "钍块", ru: "Ториевый блок", pt: "Bloco de Tório", fr: "Bloc de thorium", de: "Thoriumblock" });
-Translation.addTranslation("Uranium Block", { zh: "铀块", ru: "Урановый блок", pt: "Bloco de Urânio", fr: "Bloc d'uranium", de: "Uranblock" });
-Translation.addTranslation("Boron Block", { zh: "硼块", ru: "Борный блок", pt: "Bloco de Boro", fr: "Bloc de bore", de: "Borblock" });
-Translation.addTranslation("Lithium Block", { zh: "锂块", ru: "Литиевый блок", pt: "Bloco de Lítio", fr: "Bloc de lithium", de: "Lithiumblock" });
-Translation.addTranslation("Magnesium Block", { zh: "镁块", ru: "Магниевый блок", pt: "Bloco de Magnésio", fr: "Bloc de magnésium", de: "Magnesiumblock" });
-Translation.addTranslation("Graphite Block", { zh: "石墨块", ru: "Графитовый блок", pt: "Bloco de Grafite", fr: "Bloc de graphite", de: "Graphitblock" });
-Translation.addTranslation("Beryllium Block", { zh: "铍块", ru: "Бериллиевый блок", pt: "Bloco de Berilo", fr: "Bloc de béryllium", de: "Berylliumblock" });
-Translation.addTranslation("Zirconium Block", { zh: "锆块", ru: "Циркониевый блок", pt: "Bloco de Zircônio", fr: "Bloc de zirconium", de: "Zirkoniumblock" });
-Translation.addTranslation("Manganese Block", { zh: "锰块", ru: "Марганцевый блок", fr: "Bloc de manganèse" });
-Translation.addTranslation("Aluminum Block", { zh: "铝块", ru: "Алюминиевый блок", fr: "Bloc d'aluminium" });
-Translation.addTranslation("Silver Block", { zh: "银块", ru: "Серебряный блок", fr: "Bloc d'argent" });
-Translation.addTranslation("Thorium-230 Block", { zh: "贫钍块", ru: "Обеднённый блок тория", pt: "Bloco de Tório Esgotado", de: "Erschöpfter Thoriumblock" });
-Translation.addTranslation("Uranium-238 Block", { zh: "铀-238 块", ru: "Блок урана-238", fr: "Bloc d'uranium 238" });
-Translation.addTranslation("Neptunium-237 Block", { zh: "镎-237 块", ru: "Блок нептуния-237", fr: "Bloc de neptunium 237" });
-Translation.addTranslation("Plutonium-242 Block", { zh: "钚-242 块", ru: "Блок плутония-242", fr: "Bloc de plutonium 242" });
-Translation.addTranslation("Americium-243 Block", { zh: "镅-243 块", ru: "Блок америция-243", fr: "Bloc d'américium 243" });
-Translation.addTranslation("Curium-246 Block", { zh: "锔-246 块", ru: "Блок кюрия-246", fr: "Bloc de curium 246" });
-Translation.addTranslation("Berkelium-247 Block", { zh: "锫-247 块", ru: "Блок беркелия-247", fr: "Bloc de berkélium 247" });
-Translation.addTranslation("Californium-252 Block", { zh: "锎-252 块", ru: "Блок калифорния-252", fr: "Bloc de californium 252" });
-
-
-Translation.addTranslation("Ingots", { ru: "Слитки" });
-Translation.addTranslation("Copper Ingot", { zh: "铜锭", ru: "Медный слиток", pt: "Lingote de Cobre", fr: "Lingot de cuivre", de: "Kupferbarren" });
-Translation.addTranslation("Tin Ingot", { zh: "锡锭", ru: "Оловянный слиток", pt: "Lingote de Estanho", fr: "Lingot d'étain", de: "Zinnbarren" });
-Translation.addTranslation("Lead Ingot", { zh: "铅锭", ru: "Свинцовый слиток", pt: "Lingote de Chumbo", fr: "Lingot de plomb", de: "Bleibarren" });
-Translation.addTranslation("Thorium Ingot", { zh: "钍锭", ru: "Ториевый слиток", pt: "Lingote de Tório", fr: "Lingot de thorium", de: "Thoriumbarren" });
-Translation.addTranslation("Uranium Ingot", { zh: "铀锭", ru: "Урановый слиток", pt: "Lingote de Urânio", fr: "Lingot d'uranium", de: "Uranbarren" });
-Translation.addTranslation("Boron Ingot", { zh: "硼锭", ru: "Борный слиток", pt: "Lingote de Boro", fr: "Lingot de bore", de: "Borbarren" });
-Translation.addTranslation("Lithium Ingot", { zh: "锂锭", ru: "Литиевый слиток", pt: "Lingote de Lítio", fr: "Lingot de lithium", de: "Lithiumbarren" });
-Translation.addTranslation("Magnesium Ingot", { zh: "镁锭", ru: "Магниевый слиток", pt: "Lingote de Magnésio", fr: "Lingot de magnésium", de: "Magnesiumbarren" });
-Translation.addTranslation("Graphite Ingot", { zh: "石墨锭", ru: "Графитовый слиток", pt: "Lingote de Grafite", fr: "Lingot de graphite", de: "Graphitbarren" });
-Translation.addTranslation("Beryllium Ingot", { zh: "铍锭", ru: "Бериллиевый слиток", pt: "Lingote de Berilo", fr: "Lingot de béryllium", de: "Berylliumbarren" });
-Translation.addTranslation("Zirconium Ingot", { zh: "锆锭", ru: "Циркониевый слиток", pt: "Lingote de Zircônio", fr: "Lingot de zirconium", de: "Zirkoniumbarren" });
-Translation.addTranslation("Manganese Ingot", { zh: "锰锭", ru: "Марганцевый слиток", fr: "Lingot de manganèse" });
-Translation.addTranslation("Aluminum Ingot", { zh: "铝锭", ru: "Алюминиевый слиток", fr: "Lingot d'aluminium" });
-Translation.addTranslation("Silver Ingot", { zh: "银锭", ru: "Серебряный слиток", fr: "Lingot d'argent" });
-Translation.addTranslation("Manganese Oxide Ingot", { zh: "氧化锰锭", ru: "Слиток оксида марганца", fr: "Lingot d'oxyde de manganèse" });
-Translation.addTranslation("Manganese Dioxide Ingot", { zh: "二氧化锰锭", ru: "Слиток диоксида марганца", fr: "Lingot de dioxyde de manganèse" });
-Translation.addTranslation("Bronze Ingot", { zh: "青铜锭", ru: "Бронзовый сплав", pt: "Liga de Bronze", fr: "Lingot de bronze", de: "Bronzelegierung" });
-Translation.addTranslation("Tough Alloy", { zh: "高强合金", ru: "Прочный сплав", pt: "Liga Resistente", de: "Harte Legierung" });
-Translation.addTranslation("Hard Carbon Alloy", { zh: "硬碳合金", ru: "Твердый углерод", pt: "Liga de Carbono Endurecido", de: "Harte Kohlenstofflegierung" });
-Translation.addTranslation("Magnesium Diboride Alloy", { zh: "二硼化镁合金", ru: "Сплав диборида магния", pt: "Liga de Diboreto de Magnésio", de: "Magnesiumdiboridlegierung" });
-Translation.addTranslation("Lithium Manganese Dioxide Alloy", { zh: "锂锰氧化物合金", ru: "Сплав литий-марганцевого диоксида", pt: "Liga de Dióxido de Manganês de Lítio", de: "Lithiummangandioxidlegierung" });
-Translation.addTranslation("Steel Ingot", { zh: "钢锭", ru: "Стальной сплав", pt: "Liga de Aço", fr: "Lingot d'acier", de: "Stahlbarren" });
-Translation.addTranslation("Ferroboron Alloy", { zh: "硼铁合金", ru: "Ферроборонный сплав", pt: "Liga de Ferro-boro", de: "Ferroborlegierung" });
-Translation.addTranslation("Shibuichi Alloy", { zh: "朦胧银", ru: "Шибуичи сплав", pt: "Liga Shibuichi", de: "Shibuichilegierung" });
-Translation.addTranslation("Tin Silver Alloy", { zh: "锡银合金", ru: "Оловянно-серебряный сплав", pt: "Liga de Estanho Prateado", de: "Zinnsilberlegierung" });
-Translation.addTranslation("Lead Platinum Alloy", { zh: "铅铂合金", ru: "Свинцово-платиновый сплав", pt: "Liga de Platina com Chumbo", de: "Bleiplatinlegierung" });
-Translation.addTranslation("Extreme Alloy", { ru: "Экстремальный сплав", de: "Extreme Legierung" });
-Translation.addTranslation("Thermoconducting Alloy", { ru: "Термопроводящий сплав", de: "Wärmeleitende Legierung" });
-Translation.addTranslation("Zircaloy", { ru: "Цирконий" });
-Translation.addTranslation("Silicon Carbide Ingot", { zh: "碳化硅锭", ru: "Слиток карбида кремния", fr: "Lingot de carbure de silicium" });
-Translation.addTranslation("SiC-SiC Ceramic Matrix Composite", { ru: "Кремниево-кремниевый матричный композит" });
-Translation.addTranslation("HSLA Steel Ingot", { zh: "高强度低合金钢锭", ru: "Слиток стали HSLA", fr: "Lingot d'acier faiblement allié à haute résistance" });
-Translation.addTranslation("Enderium Ingot", { ru: "Слиток эндерия" });
-
-
-Translation.addTranslation("Dusts", { ru: "Пылинки" });
-Translation.addTranslation("Copper Dust", { zh: "铜粉", ru: "Медная пыль", pt: "Pó de Cobre", fr: "Poudre de cuivre", de: "Kupferstaub" });
-Translation.addTranslation("Tin Dust", { zh: "锡粉", ru: "Оловянная пыль", pt: "Pó de Estanho", fr: "Poudre d'étain", de: "Zinnstaub" });
-Translation.addTranslation("Lead Dust", { zh: "铅粉", ru: "Свинцовая пыль", pt: "Pó de Chumbo", fr: "Poudre de plomb", de: "Bleistaub" });
-Translation.addTranslation("Thorium Dust", { zh: "钍粉", ru: "Ториевая пыль", pt: "Pó de Tório", fr: "Poudre de thorium", de: "Thoriumstaub" });
-Translation.addTranslation("Uranium Dust", { zh: "铀粉", ru: "Урановая пыль", pt: "Pó de Urânio", fr: "Poudre d'uranium", de: "Uranstaub" });
-Translation.addTranslation("Boron Dust", { zh: "硼粉", ru: "Борная пыль", pt: "Pó de Boro", fr: "Poudre de bore", de: "Borstaub" });
-Translation.addTranslation("Lithium Dust", { zh: "锂粉", ru: "Литиевая пыль", pt: "Pó de Lítio", fr: "Poudre de lithium", de: "Lithiumstaub" });
-Translation.addTranslation("Magnesium Dust", { zh: "镁粉", ru: "Магниевая пыль", pt: "Pó de Magnésio", fr: "Poudre de magnésium", de: "Magnesiumstaub" });
-Translation.addTranslation("Graphite Dust", { zh: "石墨粉", ru: "Графитовая пыль", pt: "Pó de Grafite", fr: "Poudre de graphite", de: "Graphitstaub" });
-Translation.addTranslation("Beryllium Dust", { zh: "铍粉", ru: "Бериллиевая пыль", pt: "Pó de Berilo", fr: "Poudre de béryllium", de: "Berylliumstaub" });
-Translation.addTranslation("Zirconium Dust", { zh: "锆粉", ru: "Циркониевая пыль", pt: "Pó de Zircônio", fr: "Poudre de zirconium", de: "Zirkoniumstaub" });
-Translation.addTranslation("Manganese Dust", { zh: "锰粉", ru: "Марганцевая пыль", fr: "Poudre de manganèse" });
-Translation.addTranslation("Aluminum Dust", { zh: "铝粉", ru: "Алюминиевая пыль", fr: "Poudre d'aluminium" });
-Translation.addTranslation("Silver Dust", { zh: "银粉", ru: "Серебряная пыль", fr: "Poudre d'argent" });
-Translation.addTranslation("Manganese Oxide Dust", { zh: "氧化锰粉", ru: "Пыль оксида марганца", fr: "Poudre d'oxyde de manganèse" });
-Translation.addTranslation("Manganese Dioxide Dust", { zh: "二氧化锰粉", ru: "Пыль диоксида марганца", fr: "Poudre de dioxyde de manganèse" });
-Translation.addTranslation("Crushed Diamond", { zh: "钻石粉末", ru: "Дроблёный алмаз", pt: "Diamante Moído", fr: "Diamant broyé", de: "Zerkleinerter Diamant" });
-Translation.addTranslation("Crushed Rhodochrosite", { zh: "菱锰粉末", ru: "Дроблёный родохрозит", pt: "Rodocrosita Moída", fr: "Rhodochrosite broyée", de: "Zerkleinerter Rhodochrosit" });
-Translation.addTranslation("Crushed Quartz", { zh: "石英粉末", ru: "Дроблёный кварц", pt: "Quartzo Moído", fr: "Quartz broyé", de: "Zerkleinerter Quarz" });
-Translation.addTranslation("Crushed Obsidian", { zh: "黑曜石粉末", ru: "Дроблёный обсидиан", pt: "Obsidiana Moída", fr: "Obsidienne broyée", de: "Zerkleinerter Quarz" });
-Translation.addTranslation("Hexagonal Boron Nitride", { zh: "六方氮化硼", ru: "Шестиугольный нитрид бора", pt: "Nitrido de Boro Amorfo", fr: "Nitrure de bore hexagonale", de: "Hexagonales Bornitrid" });
-Translation.addTranslation("Crushed Fluorite", { zh: "氟石粉末", ru: "Дроблёный флюорит", pt: "Fluorita Moída", fr: "Fluorite broyée", de: "Zerkleinerter Fluorid" });
-Translation.addTranslation("Sulfur", { zh: "硫磺", ru: "Сера", pt: "Enxofre", fr: "Soufre", de: "Schwefel" });
-Translation.addTranslation("Crushed Coal", { zh: "煤炭粉末", ru: "Дроблёный уголь", fr: "Charbon broyé", de: "Zerkleinerte Kohle" });
-Translation.addTranslation("Crushed Villiaumite", { zh: "氟盐粉末", ru: "Дроблёный виллиомит", fr: "Villiaumite broyée", de: "Zerkleinerter Villiaumit" });
-Translation.addTranslation("Crushed Carobbiite", { zh: "方氟钾石粉末", ru: "Дроблёный кароббиит", fr: "Carobbiite broyée", de: "Zerkleinerter Carobbiit" });
-Translation.addTranslation("Crushed Arsenic", { zh: "砷粉末", ru: "Дроблёный мышьяк", fr: "Arsenic broyé", de: "Zerkleinertes Arsenik" });
-Translation.addTranslation("Crushed End Stone", { zh: "末地石粉末", ru: "Дроблёный эндерняк", fr: "Pierre de l'end broyée" });
-
-
-Translation.addTranslation("Gems", { ru: "Драгоценности" });
-Translation.addTranslation("Rhodochrosite", { zh: "菱锰", ru: "Родохрозит", pt: "Rodocrosita", fr: "Rhodochrosite", de: "Rhodochrosit" });
-Translation.addTranslation("Cubic Boron Nitride", { zh: "立方氮化硼", ru: "Кубический нитрид бора", pt: "Nitrido de Boro Cúbico", fr: "Nitrure de bore cubique", de: "Kubisches Bornitrid" });
-Translation.addTranslation("Fluorite", { zh: "氟石", ru: "Флюорит", pt: "Fluorita", fr: "Fluorite", de: "Fluorit" });
-Translation.addTranslation("Villiaumite", { zh: "氟盐", ru: "Виллиомит", fr: "Villiaumite", de: "Villiaumit" });
-Translation.addTranslation("Carobbiite", { zh: "方氟钾石", ru: "Кароббиит", fr: "Carobbiite", de: "Carobbiit" });
-Translation.addTranslation("Boron Arsenide", { zh: "砷化硼", ru: "Арсенид бора", fr: "Arséniure de bore", de: "Borarsenid" });
-Translation.addTranslation("Silicon", { zh: "硅", ru: "Кремний", fr: "Silicium" });
-
-
-Translation.addTranslation("Compounds", { ru: "Соединения" });
-Translation.addTranslation("Calcium Sulfate", { zh: "硫酸钙", ru: "Сульфат кальция", pt: "Sulfato de Cálcio", fr: "Sulfate de calcium", de: "Calciumsulfat" });
-Translation.addTranslation("Crystal Binder", { zh: "晶体粘合剂", ru: "Кристаллический связующий элемент", pt: "Cristal Isolante", fr: "Liant de cristal", de: "Kristallbinder" });
-Translation.addTranslation("Energetic Blend", { zh: "充能混合物", ru: "Энергетическая смесь", fr: "Mélange énergétique", de: "Energische Mischung" });
-Translation.addTranslation("Sodium Fluoride", { zh: "氟化钠", ru: "Фторид натрия", fr: "Fluorure de sodium", de: "Natriumfluorid" });
-Translation.addTranslation("Potassium Fluoride", { zh: "氟化钾", ru: "Фторид калия", fr: "Fluorure de potassium", de: "Kaliumfluorid" });
-Translation.addTranslation("Sodium Hydroxide", { zh: "氢氧化钠", ru: "Гидроксид натрия", fr: "Hydroxyde de sodium", de: "Natriumhydroxid" });
-Translation.addTranslation("Potassium Hydroxide", { zh: "氢氧化钾", ru: "Гидроксид калия", fr: "Hydroxyde de potassium", de: "Kaliumhydroxid" });
-Translation.addTranslation("Borax", { zh: "硼砂", ru: "Бура", fr: "Borax" });
-Translation.addTranslation("Dimensional Blend", { zh: "维度混合物", ru: "Размерная смесь", fr: "Mélange dimensionnel" });
-Translation.addTranslation("Carbon-Manganese Blend", { zh: "碳锰混合物", ru: "Углеродно-марганцевая смесь", fr: "Mélange de carbone et de manganèse" });
-Translation.addTranslation("Alugentum Dust", { zh: "银铝粉", ru: "Алюгентовая пыль", fr: "Poudre d'alugentum" });
-
-
-Translation.addTranslation("Basic Plating", { zh: "基础板", ru: "Базовая обшивка", pt: "Placa Básica", fr: "Placage basique", de: "Einfache Platte" });
-Translation.addTranslation("Advanced Plating", { zh: "高级板", ru: "Улучшенная обшивка", pt: "Placa Avançada", fr: "Placage avancé", de: "Fortgeschrittene Platte" });
-Translation.addTranslation("DU Plating", { zh: "贫铀板", ru: "ДУ обшивка", pt: "Placa de Urânio", fr: "Placage DU", de: "DU Platte" });
-Translation.addTranslation("Elite Plating", { zh: "精英板", ru: "Элитная обшивка", pt: "Placa Elite", fr: "Placage élite", de: "Eliteplatte" });
-Translation.addTranslation("Copper Solenoid", { zh: "铜螺线管", ru: "Медный соленоид", pt: "Solenóide de Cobre", fr: "Solénoïde en cuivre", de: "Kupfersolenoid" });
-Translation.addTranslation("Magnesium Diboride Solenoid", { zh: "二硼化镁螺线管", ru: "Соленоид из диборида магния", pt: "Solenóide de Diboreto de Magnésio", fr: "Solénoïde en diborure de magnésium", de: "Magnesiumdiboridsolenoid" });
-Translation.addTranslation("Bioplastic", { zh: "生物塑料", ru: "Биопластик", pt: "Bioplástico", fr: "Bioplastique", de: "Bioplastik" });
-Translation.addTranslation("Servomechanism", { zh: "伺服系统", ru: "Сервомеханизм", fr: "Servomécanisme", de: "Servomechanismus" });
-Translation.addTranslation("Electric Motor", { zh: "电动马达", ru: "Электродвигатель", fr: "Moteur électrique", de: "Elektromotor" });
-Translation.addTranslation("Linear Actuator", { zh: "线性执行器", ru: "Линейный привод", fr: "Actionneur linéaire", de: "Linearer Auslöser" });
-Translation.addTranslation("Lithium Ion Cell", { zh: "锂离子电池", ru: "Литий-ионная ячейка", fr: "Batterie lithium-ion", de: "Lithium-Ionen Akku" });
-
-Translation.addTranslation("Machine Chassis", { zh: "机器框架", ru: "Шасси машины", fr: "Chassis de machine", de: "Maschinengehäuse" });
-Translation.addTranslation("Empty Frame", { zh: "空框架", ru: "Пустая рамка", fr: "Cadre de machine vide", de: "Leerer Rahmen" });
-Translation.addTranslation("Steel Chassis", { zh: "钢框架", ru: "Стальная рамка", fr: "Chassis de machine en acier" });
+Translation.addTranslation("%dsec", { ru: "%dсек" });
+Translation.addTranslation("%dmin", { ru: "%dмин" });
+Translation.addTranslation("%d tick", { ru: "%d тик" });
+Translation.addTranslation("%d~ ticks", { ru: "%d~ тика" });
+Translation.addTranslation("%d ticks", { ru: "%d тиков" });
+Translation.addTranslation("%dmB", { ru: "%dмВ" });

@@ -299,7 +299,11 @@ namespace ReactorCooler {
 
     const coolerNameOverride = (item: ItemInstance, name: string): string => {
         const coolerData = ReactorPartRegistry.get(item.id) as typeof Base;
-        return name + "\n§bCooling rate: " + coolerData.cooling + "H/t\n" + coolerData.description;
+        const lines = [
+            translate("Cooling Rate: %d H/t", coolerData.cooling),
+            translate(coolerData.description)
+        ];
+        return name + "\n§b" + lines.join("\n") + "§r";
     };
 
     Item.registerNameOverrideFunction(NCID.cooler_water, coolerNameOverride);

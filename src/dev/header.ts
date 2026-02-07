@@ -37,7 +37,7 @@ const getLiquidByTex = (texture: string): string => {
 }
 
 Network.addClientPacket("nc.clientTipMessage", function(data: {msg: string}) {
-	Game.tipMessage(data.msg);
+	Game.tipMessage(translate(data.msg));
 });
 
 type VanillaID = keyof typeof VanillaBlockID | keyof typeof VanillaItemID;

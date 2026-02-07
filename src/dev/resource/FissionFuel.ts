@@ -40,10 +40,10 @@ class FissionFuel {
         const t = tick / 20;
         const m = t / 60 | 0;
         const s = t % 60;
-        let timeText = "";
-        if(m > 0) timeText += m + "min ";
-        if(s > 0) timeText += s + "sec";
-        return timeText;
+        let parts = [];
+        if(m > 0) parts.push(translate("%dmin", m));
+        if(s > 0) parts.push(translate("%dsec", s));
+        return parts.join(" ");
     }
 
     static getAllListForRV(): RecipePattern[] {
@@ -65,13 +65,18 @@ class FissionFuel {
 
         onNameOverride(item: ItemInstance, translation: string, name: string): string {
             if(item.data === 1){
-                return "Deplated " + name;
+                return translate("Depleted " + name);
             }
             const fuelData = FissionFuel.getParams(item.id);
             if(!fuelData){
-                return name;
+                return translation;
             }
-            return name + `\n§bBase process time: ${FissionFuel.tickToString(fuelData.time)}\nBase power: ${fuelData.power} RF/t\nBase heat gen: ${fuelData.heat} H/t`;
+            const lines = [
+                translate("Base Process Time: %d", FissionFuel.tickToString(fuelData.time)),
+                translate("Base Process Power: %d RF/t", fuelData.power),
+                translate("Base Heat Gen: %d H/t", fuelData.heat)
+            ];
+            return translation + "\n" + lines.join("\n");
         }
 
         onIconOverride(item: ItemInstance, isModUi: boolean): Item.TextureData {

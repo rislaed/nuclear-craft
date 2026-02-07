@@ -6,7 +6,7 @@ class ItemFluidCell extends NCItem.ItemInstance {
     }
 
     onNameOverride(item: ItemInstance, name: string): string {
-        return name + "\n§7" + (16000 - item.data) + " mB";
+        return name + "\n§7" + translate("%dmB", 16000 - item.data) + "§r";
     }
 
 }

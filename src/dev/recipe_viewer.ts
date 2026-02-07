@@ -83,7 +83,12 @@ ModAPI.addAPICallback("RecipeViewer", (api: RecipeViewerAPI): void => {
 
         onOpen(elements: java.util.HashMap<string, UI.Element>, recipe: RecipePattern): void {
             const params = FissionFuel.getParams(recipe.input[0].id);
-            elements.get("textInfo").setBinding("text", `Base depletion time: ${FissionFuel.tickToString(params.time)}\nBase power gen: ${params.power} RF/t\nBase heat gen: ${params.heat} H/t`);
+            const lines = [
+                translate("Base Depletion Time: %s", FissionFuel.tickToString(params.time)),
+                translate("Base Power Gen: %d RF/t", params.power),
+                translate("Base Heat Gen: %d H/t", params.heat)
+            ];
+            elements.get("textInfo").setBinding("text", lines.join("\n"));
         }
 
     }
@@ -116,8 +121,11 @@ ModAPI.addAPICallback("RecipeViewer", (api: RecipeViewerAPI): void => {
 
         onOpen(elements: java.util.HashMap<string, UI.Element>, recipe: RecipePattern): void {
             const data = DecayGenerator.Recipe[recipe.input[0].id];
-            const time = data.lifetime > 60 ? Math.ceil(data.lifetime / 60) + " min" : data.lifetime + " s";
-            elements.get("textInfo").setBinding("text", `Mean lifetime: ${time}\nPower gen: ${data.power} RF/s`);
+            const lines = [
+                translate("Mean Lifetime: %s", FissionFuel.tickToString(data.lifetime)),
+                translate("Power Gen: %d RF/s", data.power)
+            ];
+            elements.get("textInfo").setBinding("text", lines.join("\n"));
         }
 
     }
@@ -151,7 +159,12 @@ ModAPI.addAPICallback("RecipeViewer", (api: RecipeViewerAPI): void => {
         onOpen(elements: java.util.HashMap<string, UI.Element>, recipe: RecipePattern): void {
             const item = recipe.input[0];
             const time = NuclearFurnace.FuelData[item.id];
-            elements.get("text").setBinding("text", time + " tick\n(Smelts  " + (time / 10) + "  items)");
+            const lines = [
+                translatePlural(time, { one: "%d tick", few: "%d~ ticks", many: "%d ticks" }),
+                translatePlural(time / 10, { one: "(Smelts %d item)", few: "(Smelts %d~ items)", many: "(Smelts %d items)" })
+            ];
+            elements.get("text").setBinding("text", lines.join("\n"));
+            this.setDescription(translate("Fuel"));
         }
 
     }

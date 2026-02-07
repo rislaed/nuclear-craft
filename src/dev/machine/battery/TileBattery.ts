@@ -121,7 +121,8 @@ Network.addClientPacket("nc.watchBattery", (data: {x: number, y: number, z: numb
                 scale++;
             }
 
-            Game.tipMessage(`Energy Stored: ${energy} / ${storage} ${["", "k", "M", "G"][scale]}RF`);
+            const unit = ["", "k", "M", "G"][scale] + "RF";
+            Game.tipMessage(translate("Energy Stored: %d / %d", energy, storage) + " " + unit);
 
             java.lang.Thread.sleep(500);
 

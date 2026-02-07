@@ -62,7 +62,7 @@ Item.addCreativeGroup("ingot", Translation.translate("Ingots"), [
 class ItemDustWithTiny extends NCItem.ItemInstance {
 
     onNameOverride(item: ItemInstance, translation: string, name: string): string {
-        return item.data ? "Tiny Pile of " + name : name;
+        return item.data ? translate("Tiny Pile of " + name) : translation;
     }
 
     onIconOverride(item: ItemInstance, isModUi: boolean): Item.TextureData {

@@ -28,7 +28,7 @@ class FissionMaterial {
         }
 
         onNameOverride(item: ItemInstance, translation: string, name: string): string {
-            return item.data === 1 ? "Tiny Clamp of " + name : name;
+            return item.data === 1 ? translate("Tiny Clamp of " + name) : translation;
         }
 
         onIconOverride(item: ItemInstance, isModUi: boolean): Item.TextureData {
