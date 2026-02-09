@@ -160,8 +160,8 @@ ModAPI.addAPICallback("RecipeViewer", (api: RecipeViewerAPI): void => {
             const item = recipe.input[0];
             const time = NuclearFurnace.FuelData[item.id];
             const lines = [
-                translatePlural(time, { one: "%d tick", few: "%d~ ticks", many: "%d ticks" }),
-                translatePlural(time / 10, { one: "(Smelts %d item)", few: "(Smelts %d~ items)", many: "(Smelts %d items)" })
+                translatePlural({ one: "%d tick", few: "%d~ ticks", many: "%d ticks" }, time),
+                translatePlural({ one: "(Smelts %d item)", few: "(Smelts %d~ items)", many: "(Smelts %d items)" }, time / 10)
             ];
             elements.get("text").setBinding("text", lines.join("\n"));
             this.setDescription(translate("Fuel"));

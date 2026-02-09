@@ -11,13 +11,29 @@ const translate = (text: string, ...format: (string | number | boolean)[]) => {
 };
 
 interface PluralForms {
+	/**
+	 * when number equals zero
+	 * e.g. no items
+	 */
 	zero?: string;
+	/**
+	 * when number is singular (1, except 11)
+	 * e.g. %s item
+	 */
 	one: string;
+	/**
+	 * when number is paucal/limited plural (2-4)
+	 * e.g. %s~ items, ~ will be replaced with leading number
+	 */
 	few: string;
+	/**
+	 * when number is many plural
+	 * e.g. %s items
+	 */
 	many: string;
 }
 
-const translatePlural = (count: number, forms: PluralForms, ...format: (string | number | boolean)[]) => {
+const translatePlural = (forms: PluralForms, count: number, ...format: (string | number | boolean)[]) => {
 	format = [count, ...format];
 	if (count === 0) {
 		return translate(forms.zero ?? forms.many, ...format);
@@ -29,9 +45,9 @@ const translatePlural = (count: number, forms: PluralForms, ...format: (string |
 	if (count % 10 === 0 || count % 10 >= 5 || count % 100 - count % 10 === 10) {
 		return translate(forms.many, ...format);
 	}
-	const text = forms.few.replace("~", "" + (count % 10));
-	format[0] = Math.floor(count / 10) * 10;
-	return translate(text, ...format);
+	format[0] = Math.floor(count / 10); // strip leading number
+	const text = translate(forms.few, ...format);
+	return text.replace("~", "" + (count % 10));
 };
 
 
